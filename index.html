@@ -587,7 +587,7 @@ updateLevelLabel();
 loadSentence();
 }
 
-function shuffle(a){return[…a].sort(()=>Math.random()-0.5);}
+function shuffle(a){return[...a].sort(()=>Math.random()-0.5);}
 
 // ── LEVEL DOTS ─────────────────────────────────────────────────────
 function renderLevelDots(){
@@ -686,7 +686,7 @@ i===easyBlankIdx?`<span class="easy-blank" id="easy-blank">?</span>`
 ).join(’’);
 const correct=s.id[easyBlankIdx];
 const distractors=shuffle(getAllWords().filter(w=>w!==correct)).slice(0,3);
-const opts=shuffle([correct,…distractors]);
+const opts=shuffle([correct,...distractors]);
 const optEl=document.getElementById(‘easy-options’);
 optEl.style.display=‘flex’;
 optEl.innerHTML=opts.map(w=>{
@@ -722,7 +722,7 @@ function getAllWords(){return LEVELS.flatMap(lvl=>lvl.flatMap(s=>s.id));}
 
 function buildBank(s,showTr){
 const distractors=shuffle(getAllWords().filter(w=>!s.id.includes(w))).slice(0,Math.min(3,s.id.length));
-const words=shuffle([…s.id,…distractors]);
+const words=shuffle([...s.id,...distractors]);
 const wb=document.getElementById(‘word-bank’);
 wb.innerHTML=’’;
 words.forEach((w,i)=>{
@@ -866,7 +866,7 @@ if(levelIdx>=levelOrder.length){
 // Reshuffle only unsolved sentences to fill gaps
 const unsolved=LEVELS[currentLevel].map((_,i)=>i).filter(i=>!solvedInLevel.has(i));
 if(unsolved.length>0){
-levelOrder=[…levelOrder,…shuffle(unsolved)];
+levelOrder=[...levelOrder,...shuffle(unsolved)];
 } else {
 showLevelComplete(); return;
 }
