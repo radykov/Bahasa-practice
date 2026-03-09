@@ -319,7 +319,7 @@ const TR={
   'Itu':'that','itu':'that',
   'Jalan':'road/walk',
   'Jam':'hour/clock',
-  'Jangan':"don't",
+  'Jangan':"don\'t",
   'Jauh':'far','jauh':'far',
   'kabar':'news',
   'kacang':'peanuts',
@@ -409,164 +409,164 @@ function tr(w){return TR[w]||TR[w.replace(/[!?,.]$/,'')]||'';}
 const LEVELS = [
 // ── LEVEL 1 ── Ultra basics, 1-2 words
 [
-{cat:‘greetings’,en:‘Hello!’,id:[‘Halo’],hint:’“Halo” — same as English, easy!’},
-{cat:‘greetings’,en:‘Thank you.’,id:[‘Terima’,‘kasih’],hint:’“Terima” = receive, “kasih” = love. Together: thank you.’},
-{cat:‘greetings’,en:‘Sorry / Excuse me.’,id:[‘Permisi’],hint:‘Use for “excuse me” or to get someone's attention.’},
-{cat:‘greetings’,en:‘Good morning.’,id:[‘Selamat’,‘pagi’],hint:’“Selamat” = safe/happy, “pagi” = morning.’},
-{cat:‘food’,en:‘Delicious!’,id:[‘Enak’],hint:’“Enak” = yummy/delicious. One of the best words to know!’},
-{cat:‘food’,en:‘Spicy!’,id:[‘Pedas’],hint:’“Pedas” = spicy. Say it while pointing at food!’},
-{cat:‘directions’,en:‘Left.’,id:[‘Kiri’],hint:’“Kiri” = left. Think of it as the quirky direction.’},
-{cat:‘directions’,en:‘Right.’,id:[‘Kanan’],hint:’“Kanan” = right.’},
-{cat:‘shopping’,en:‘Expensive!’,id:[‘Mahal’],hint:’“Mahal” = expensive. Useful for bargaining!’},
-{cat:‘shopping’,en:‘Cheap!’,id:[‘Murah’],hint:’“Murah” = cheap. The word you want to hear!’},
+{cat:'greetings',en:'Hello!',id:['Halo'],hint:'"Halo" — same as English, easy!'},
+{cat:'greetings',en:'Thank you.',id:['Terima','kasih'],hint:'"Terima" = receive, "kasih" = love. Together: thank you.'},
+{cat:'greetings',en:'Sorry / Excuse me.',id:['Permisi'],hint:'Use for "excuse me" or to get someone\'s attention.'},
+{cat:'greetings',en:'Good morning.',id:['Selamat','pagi'],hint:'"Selamat" = safe/happy, "pagi" = morning.'},
+{cat:'food',en:'Delicious!',id:['Enak'],hint:'"Enak" = yummy/delicious. One of the best words to know!'},
+{cat:'food',en:'Spicy!',id:['Pedas'],hint:'"Pedas" = spicy. Say it while pointing at food!'},
+{cat:'directions',en:'Left.',id:['Kiri'],hint:'"Kiri" = left. Think of it as the quirky direction.'},
+{cat:'directions',en:'Right.',id:['Kanan'],hint:'"Kanan" = right.'},
+{cat:'shopping',en:'Expensive!',id:['Mahal'],hint:'"Mahal" = expensive. Useful for bargaining!'},
+{cat:'shopping',en:'Cheap!',id:['Murah'],hint:'"Murah" = cheap. The word you want to hear!'},
 ],
 // ── LEVEL 2 ── Core 2-word phrases
 [
-{cat:‘greetings’,en:‘How are you?’,id:[‘Apa’,‘kabar’],hint:‘Literally “what news?”’},
-{cat:‘greetings’,en:“You’re welcome.”,id:[‘Sama’,‘sama’],hint:‘Literally “same same” — like in Thai!’},
-{cat:‘greetings’,en:‘I'm sorry.’,id:[‘Maaf’],hint:’“Maaf” = sorry/forgive me.’},
-{cat:‘food’,en:‘Not spicy.’,id:[‘Jangan’,‘pedas’],hint:’“Jangan” = don't. “Pedas” = spicy.’},
-{cat:‘food’,en:‘This one.’,id:[‘Ini’],hint:’“Ini” = this. Point and say it!’},
-{cat:‘food’,en:‘That one.’,id:[‘Itu’],hint:’“Itu” = that. For things further away.’},
-{cat:‘directions’,en:‘Turn left.’,id:[‘Belok’,‘kiri’],hint:’“Belok” = turn.’},
-{cat:‘directions’,en:‘Turn right.’,id:[‘Belok’,‘kanan’],hint:’“Belok” = turn. “Kanan” = right.’},
-{cat:‘shopping’,en:‘How much?’,id:[‘Berapa’],hint:’“Berapa” = how much. Say this for any price!’},
-{cat:‘shopping’,en:‘Can you discount?’,id:[‘Bisa’,‘kurang’],hint:’“Bisa” = can. “Kurang” = less.’},
+{cat:'greetings',en:'How are you?',id:['Apa','kabar'],hint:'Literally "what news?"'},
+{cat:'greetings',en:"You\'re welcome.",id:['Sama','sama'],hint:'Literally "same same" — like in Thai!'},
+{cat:'greetings',en:'I\'m sorry.',id:['Maaf'],hint:'"Maaf" = sorry/forgive me.'},
+{cat:'food',en:'Not spicy.',id:['Jangan','pedas'],hint:'"Jangan" = don\'t. "Pedas" = spicy.'},
+{cat:'food',en:'This one.',id:['Ini'],hint:'"Ini" = this. Point and say it!'},
+{cat:'food',en:'That one.',id:['Itu'],hint:'"Itu" = that. For things further away.'},
+{cat:'directions',en:'Turn left.',id:['Belok','kiri'],hint:'"Belok" = turn.'},
+{cat:'directions',en:'Turn right.',id:['Belok','kanan'],hint:'"Belok" = turn. "Kanan" = right.'},
+{cat:'shopping',en:'How much?',id:['Berapa'],hint:'"Berapa" = how much. Say this for any price!'},
+{cat:'shopping',en:'Can you discount?',id:['Bisa','kurang'],hint:'"Bisa" = can. "Kurang" = less.'},
 ],
 // ── LEVEL 3 ── I want / I need
 [
-{cat:‘want’,en:‘I want.’,id:[‘Saya’,‘mau’],hint:’“Saya” = I. “Mau” = want. Your most useful combo!’},
-{cat:‘want’,en:‘I want this.’,id:[‘Saya’,‘mau’,‘ini’],hint:‘Point at anything and say this!’},
-{cat:‘want’,en:‘I don't want it.’,id:[‘Saya’,‘tidak’,‘mau’],hint:’“Tidak” = not/no.’},
-{cat:‘food’,en:‘I want to eat.’,id:[‘Saya’,‘mau’,‘makan’],hint:’“Makan” = eat.’},
-{cat:‘food’,en:‘I want to drink.’,id:[‘Saya’,‘mau’,‘minum’],hint:’“Minum” = drink.’},
-{cat:‘food’,en:‘One more.’,id:[‘Satu’,‘lagi’],hint:’“Satu” = one. “Lagi” = more/again.’},
-{cat:‘food’,en:‘Cold water.’,id:[‘Air’,‘dingin’],hint:’“Air” = water (say “eye-er”). “Dingin” = cold.’},
-{cat:‘food’,en:‘Hot water.’,id:[‘Air’,‘panas’],hint:’“Panas” = hot.’},
-{cat:‘food’,en:‘The bill please.’,id:[‘Minta’,‘bon’],hint:’“Minta” = ask for. “Bon” = bill.’},
-{cat:‘food’,en:‘This is delicious!’,id:[‘Ini’,‘enak’],hint:’“Ini” = this. “Enak” = delicious.’},
+{cat:'want',en:'I want.',id:['Saya','mau'],hint:'"Saya" = I. "Mau" = want. Your most useful combo!'},
+{cat:'want',en:'I want this.',id:['Saya','mau','ini'],hint:'Point at anything and say this!'},
+{cat:'want',en:'I don\'t want it.',id:['Saya','tidak','mau'],hint:'"Tidak" = not/no.'},
+{cat:'food',en:'I want to eat.',id:['Saya','mau','makan'],hint:'"Makan" = eat.'},
+{cat:'food',en:'I want to drink.',id:['Saya','mau','minum'],hint:'"Minum" = drink.'},
+{cat:'food',en:'One more.',id:['Satu','lagi'],hint:'"Satu" = one. "Lagi" = more/again.'},
+{cat:'food',en:'Cold water.',id:['Air','dingin'],hint:'"Air" = water (say "eye-er"). "Dingin" = cold.'},
+{cat:'food',en:'Hot water.',id:['Air','panas'],hint:'"Panas" = hot.'},
+{cat:'food',en:'The bill please.',id:['Minta','bon'],hint:'"Minta" = ask for. "Bon" = bill.'},
+{cat:'food',en:'This is delicious!',id:['Ini','enak'],hint:'"Ini" = this. "Enak" = delicious.'},
 ],
 // ── LEVEL 4 ── Where is + basic locations
 [
-{cat:‘directions’,en:‘Where is it?’,id:[‘Di’,‘mana’],hint:’“Di mana” = where is. Super useful opener!’},
-{cat:‘directions’,en:‘Where is the toilet?’,id:[‘Di’,‘mana’,‘toilet’],hint:‘Put location after “di mana”.’},
-{cat:‘directions’,en:‘Where is the hotel?’,id:[‘Di’,‘mana’,‘hotel’],hint:‘Many English words work in Bahasa!’},
-{cat:‘directions’,en:‘Where is the restaurant?’,id:[‘Di’,‘mana’,‘restoran’],hint:’“Restoran” = restaurant.’},
-{cat:‘directions’,en:‘Where is the market?’,id:[‘Di’,‘mana’,‘pasar’],hint:’“Pasar” = market/bazaar.’},
-{cat:‘directions’,en:‘Where is the beach?’,id:[‘Di’,‘mana’,‘pantai’],hint:’“Pantai” = beach.’},
-{cat:‘directions’,en:‘Where is the airport?’,id:[‘Di’,‘mana’,‘bandara’],hint:’“Bandara” = airport.’},
-{cat:‘directions’,en:‘Go straight.’,id:[‘Jalan’,‘terus’],hint:’“Jalan” = road/walk. “Terus” = continue.’},
-{cat:‘directions’,en:‘Near here.’,id:[‘Dekat’,‘sini’],hint:’“Dekat” = near. “Sini” = here.’},
-{cat:‘directions’,en:‘Stop here.’,id:[‘Berhenti’,‘di’,‘sini’],hint:’“Berhenti” = stop. Essential for taxis!’},
+{cat:'directions',en:'Where is it?',id:['Di','mana'],hint:'"Di mana" = where is. Super useful opener!'},
+{cat:'directions',en:'Where is the toilet?',id:['Di','mana','toilet'],hint:'Put location after "di mana".'},
+{cat:'directions',en:'Where is the hotel?',id:['Di','mana','hotel'],hint:'Many English words work in Bahasa!'},
+{cat:'directions',en:'Where is the restaurant?',id:['Di','mana','restoran'],hint:'"Restoran" = restaurant.'},
+{cat:'directions',en:'Where is the market?',id:['Di','mana','pasar'],hint:'"Pasar" = market/bazaar.'},
+{cat:'directions',en:'Where is the beach?',id:['Di','mana','pantai'],hint:'"Pantai" = beach.'},
+{cat:'directions',en:'Where is the airport?',id:['Di','mana','bandara'],hint:'"Bandara" = airport.'},
+{cat:'directions',en:'Go straight.',id:['Jalan','terus'],hint:'"Jalan" = road/walk. "Terus" = continue.'},
+{cat:'directions',en:'Near here.',id:['Dekat','sini'],hint:'"Dekat" = near. "Sini" = here.'},
+{cat:'directions',en:'Stop here.',id:['Berhenti','di','sini'],hint:'"Berhenti" = stop. Essential for taxis!'},
 ],
 // ── LEVEL 5 ── My name / introductions + food orders
 [
-{cat:‘greetings’,en:‘My name is…’,id:[‘Nama’,‘saya’],hint:’“Nama” = name. Say this then your name.’},
-{cat:‘greetings’,en:‘I don't understand.’,id:[‘Saya’,‘tidak’,‘mengerti’],hint:’“Mengerti” = understand.’},
-{cat:‘greetings’,en:‘Can you speak slowly?’,id:[‘Bisa’,‘bicara’,‘pelan’,‘pelan’],hint:’“Pelan-pelan” = slowly. Repeat = gentler.’},
-{cat:‘greetings’,en:‘Thank you very much.’,id:[‘Terima’,‘kasih’,‘banyak’],hint:’“Banyak” = a lot. Adds warmth!’},
-{cat:‘food’,en:‘I don't eat meat.’,id:[‘Saya’,‘tidak’,‘makan’,‘daging’],hint:’“Daging” = meat.’},
-{cat:‘food’,en:‘What is this?’,id:[‘Ini’,‘apa’],hint:‘Flip: “apa ini” also works!’},
-{cat:‘food’,en:‘Not sweet.’,id:[‘Jangan’,‘manis’],hint:’“Manis” = sweet.’},
-{cat:‘food’,en:‘Not salty.’,id:[‘Jangan’,‘asin’],hint:’“Asin” = salty.’},
-{cat:‘shopping’,en:‘How much is this?’,id:[‘Berapa’,‘harga’,‘ini’],hint:’“Harga” = price.’},
-{cat:‘shopping’,en:‘Too expensive.’,id:[‘Terlalu’,‘mahal’],hint:’“Terlalu” = too much.’},
+{cat:'greetings',en:'My name is…',id:['Nama','saya'],hint:'"Nama" = name. Say this then your name.'},
+{cat:'greetings',en:'I don\'t understand.',id:['Saya','tidak','mengerti'],hint:'"Mengerti" = understand.'},
+{cat:'greetings',en:'Can you speak slowly?',id:['Bisa','bicara','pelan','pelan'],hint:'"Pelan-pelan" = slowly. Repeat = gentler.'},
+{cat:'greetings',en:'Thank you very much.',id:['Terima','kasih','banyak'],hint:'"Banyak" = a lot. Adds warmth!'},
+{cat:'food',en:'I don\'t eat meat.',id:['Saya','tidak','makan','daging'],hint:'"Daging" = meat.'},
+{cat:'food',en:'What is this?',id:['Ini','apa'],hint:'Flip: "apa ini" also works!'},
+{cat:'food',en:'Not sweet.',id:['Jangan','manis'],hint:'"Manis" = sweet.'},
+{cat:'food',en:'Not salty.',id:['Jangan','asin'],hint:'"Asin" = salty.'},
+{cat:'shopping',en:'How much is this?',id:['Berapa','harga','ini'],hint:'"Harga" = price.'},
+{cat:'shopping',en:'Too expensive.',id:['Terlalu','mahal'],hint:'"Terlalu" = too much.'},
 ],
 // ── LEVEL 6 ── I want to go + transport
 [
-{cat:‘want’,en:‘I want to go to the beach.’,id:[‘Saya’,‘mau’,‘ke’,‘pantai’],hint:’“Ke” = to (direction).’},
-{cat:‘want’,en:‘I want to go to the market.’,id:[‘Saya’,‘mau’,‘ke’,‘pasar’],hint:’“Pasar” = market.’},
-{cat:‘want’,en:‘I want to go home.’,id:[‘Saya’,‘mau’,‘pulang’],hint:’“Pulang” = go home/return.’},
-{cat:‘want’,en:‘I want to go to the hotel.’,id:[‘Saya’,‘mau’,‘ke’,‘hotel’],hint:’“Ke” = to. Easy loan word!’},
-{cat:‘want’,en:‘I want to sleep.’,id:[‘Saya’,‘mau’,‘tidur’],hint:’“Tidur” = sleep.’},
-{cat:‘want’,en:‘I need help.’,id:[‘Saya’,‘butuh’,‘bantuan’],hint:’“Butuh” = need. “Bantuan” = help.’},
-{cat:‘directions’,en:‘How far is it?’,id:[‘Berapa’,‘jauh’],hint:’“Jauh” = far.’},
-{cat:‘directions’,en:‘Is it far from here?’,id:[‘Jauh’,‘dari’,‘sini’],hint:’“Dari” = from.’},
-{cat:‘shopping’,en:‘I'll take it.’,id:[‘Saya’,‘ambil’,‘ini’],hint:’“Ambil” = take.’},
-{cat:‘shopping’,en:‘Do you have a bag?’,id:[‘Ada’,‘tas’],hint:’“Ada” = have/exist.’},
+{cat:'want',en:'I want to go to the beach.',id:['Saya','mau','ke','pantai'],hint:'"Ke" = to (direction).'},
+{cat:'want',en:'I want to go to the market.',id:['Saya','mau','ke','pasar'],hint:'"Pasar" = market.'},
+{cat:'want',en:'I want to go home.',id:['Saya','mau','pulang'],hint:'"Pulang" = go home/return.'},
+{cat:'want',en:'I want to go to the hotel.',id:['Saya','mau','ke','hotel'],hint:'"Ke" = to. Easy loan word!'},
+{cat:'want',en:'I want to sleep.',id:['Saya','mau','tidur'],hint:'"Tidur" = sleep.'},
+{cat:'want',en:'I need help.',id:['Saya','butuh','bantuan'],hint:'"Butuh" = need. "Bantuan" = help.'},
+{cat:'directions',en:'How far is it?',id:['Berapa','jauh'],hint:'"Jauh" = far.'},
+{cat:'directions',en:'Is it far from here?',id:['Jauh','dari','sini'],hint:'"Dari" = from.'},
+{cat:'shopping',en:'I\'ll take it.',id:['Saya','ambil','ini'],hint:'"Ambil" = take.'},
+{cat:'shopping',en:'Do you have a bag?',id:['Ada','tas'],hint:'"Ada" = have/exist.'},
 ],
 // ── LEVEL 7 ── Hotel + accommodation
 [
-{cat:‘greetings’,en:‘I have a booking.’,id:[‘Saya’,‘sudah’,‘pesan’],hint:’“Sudah” = already. “Pesan” = book/order.’},
-{cat:‘greetings’,en:‘I need a room.’,id:[‘Saya’,‘butuh’,‘kamar’],hint:’“Kamar” = room.’},
-{cat:‘greetings’,en:‘Where is the key?’,id:[‘Di’,‘mana’,‘kunci’],hint:’“Kunci” = key.’},
-{cat:‘greetings’,en:‘I want a towel.’,id:[‘Saya’,‘mau’,‘handuk’],hint:’“Handuk” = towel.’},
-{cat:‘greetings’,en:‘I want a blanket.’,id:[‘Saya’,‘mau’,‘selimut’],hint:’“Selimut” = blanket.’},
-{cat:‘food’,en:‘I want to order.’,id:[‘Saya’,‘mau’,‘pesan’],hint:’“Pesan” = to order.’},
-{cat:‘food’,en:‘Without meat please.’,id:[‘Tanpa’,‘daging’],hint:’“Tanpa” = without. Very useful!’},
-{cat:‘food’,en:‘Can I pay now?’,id:[‘Bisa’,‘bayar’,‘sekarang’],hint:’“Bayar” = pay. “Sekarang” = now.’},
-{cat:‘shopping’,en:‘Do you have change?’,id:[‘Ada’,‘kembalian’],hint:’“Kembalian” = change (money).’},
-{cat:‘shopping’,en:‘I want to pay.’,id:[‘Saya’,‘mau’,‘bayar’],hint:’“Bayar” = pay.’},
+{cat:'greetings',en:'I have a booking.',id:['Saya','sudah','pesan'],hint:'"Sudah" = already. "Pesan" = book/order.'},
+{cat:'greetings',en:'I need a room.',id:['Saya','butuh','kamar'],hint:'"Kamar" = room.'},
+{cat:'greetings',en:'Where is the key?',id:['Di','mana','kunci'],hint:'"Kunci" = key.'},
+{cat:'greetings',en:'I want a towel.',id:['Saya','mau','handuk'],hint:'"Handuk" = towel.'},
+{cat:'greetings',en:'I want a blanket.',id:['Saya','mau','selimut'],hint:'"Selimut" = blanket.'},
+{cat:'food',en:'I want to order.',id:['Saya','mau','pesan'],hint:'"Pesan" = to order.'},
+{cat:'food',en:'Without meat please.',id:['Tanpa','daging'],hint:'"Tanpa" = without. Very useful!'},
+{cat:'food',en:'Can I pay now?',id:['Bisa','bayar','sekarang'],hint:'"Bayar" = pay. "Sekarang" = now.'},
+{cat:'shopping',en:'Do you have change?',id:['Ada','kembalian'],hint:'"Kembalian" = change (money).'},
+{cat:'shopping',en:'I want to pay.',id:['Saya','mau','bayar'],hint:'"Bayar" = pay.'},
 ],
 // ── LEVEL 8 ── Health + emergency basics
 [
-{cat:‘greetings’,en:‘I am sick.’,id:[‘Saya’,‘sakit’],hint:’“Sakit” = sick/pain. Also used for “it hurts”.’},
-{cat:‘greetings’,en:‘I have a fever.’,id:[‘Saya’,‘demam’],hint:’“Demam” = fever.’},
-{cat:‘greetings’,en:‘I need medicine.’,id:[‘Saya’,‘butuh’,‘obat’],hint:’“Obat” = medicine.’},
-{cat:‘greetings’,en:‘Where is the doctor?’,id:[‘Di’,‘mana’,‘dokter’],hint:’“Dokter” = doctor.’},
-{cat:‘greetings’,en:‘Where is the hospital?’,id:[‘Di’,‘mana’,‘rumah’,‘sakit’],hint:’“Rumah sakit” = house of sick = hospital!’},
-{cat:‘greetings’,en:‘Call the police!’,id:[‘Tolong’,‘panggil’,‘polisi’],hint:’“Tolong” = please/help. “Panggil” = call.’},
-{cat:‘greetings’,en:‘Call an ambulance!’,id:[‘Tolong’,‘panggil’,‘ambulans’],hint:’“Ambulans” = ambulance.’},
-{cat:‘greetings’,en:‘Help me please!’,id:[‘Tolong’,‘bantu’,‘saya’],hint:’“Bantu” = help (verb). “Tolong” = please.’},
-{cat:‘greetings’,en:‘It hurts here.’,id:[‘Sakit’,‘di’,‘sini’],hint:‘Point to where it hurts as you say it.’},
-{cat:‘greetings’,en:‘I lost my bag.’,id:[‘Tas’,‘saya’,‘hilang’],hint:’“Hilang” = lost/gone.’},
+{cat:'greetings',en:'I am sick.',id:['Saya','sakit'],hint:'"Sakit" = sick/pain. Also used for "it hurts".'},
+{cat:'greetings',en:'I have a fever.',id:['Saya','demam'],hint:'"Demam" = fever.'},
+{cat:'greetings',en:'I need medicine.',id:['Saya','butuh','obat'],hint:'"Obat" = medicine.'},
+{cat:'greetings',en:'Where is the doctor?',id:['Di','mana','dokter'],hint:'"Dokter" = doctor.'},
+{cat:'greetings',en:'Where is the hospital?',id:['Di','mana','rumah','sakit'],hint:'"Rumah sakit" = house of sick = hospital!'},
+{cat:'greetings',en:'Call the police!',id:['Tolong','panggil','polisi'],hint:'"Tolong" = please/help. "Panggil" = call.'},
+{cat:'greetings',en:'Call an ambulance!',id:['Tolong','panggil','ambulans'],hint:'"Ambulans" = ambulance.'},
+{cat:'greetings',en:'Help me please!',id:['Tolong','bantu','saya'],hint:'"Bantu" = help (verb). "Tolong" = please.'},
+{cat:'greetings',en:'It hurts here.',id:['Sakit','di','sini'],hint:'Point to where it hurts as you say it.'},
+{cat:'greetings',en:'I lost my bag.',id:['Tas','saya','hilang'],hint:'"Hilang" = lost/gone.'},
 ],
 // ── LEVEL 9 ── Time + day phrases
 [
-{cat:‘greetings’,en:‘What time is it?’,id:[‘Jam’,‘berapa’,‘sekarang’],hint:’“Jam” = hour/clock. “Sekarang” = now.’},
-{cat:‘greetings’,en:‘I'll be there soon.’,id:[‘Saya’,‘datang’,‘sebentar’,‘lagi’],hint:’“Datang” = come. “Sebentar” = a moment.’},
-{cat:‘greetings’,en:‘Please wait a moment.’,id:[‘Tolong’,‘tunggu’,‘sebentar’],hint:’“Tunggu” = wait.’},
-{cat:‘want’,en:‘I want to go tomorrow.’,id:[‘Saya’,‘mau’,‘pergi’,‘besok’],hint:’“Pergi” = go. “Besok” = tomorrow.’},
-{cat:‘want’,en:‘I want to come later.’,id:[‘Saya’,‘mau’,‘datang’,‘nanti’],hint:’“Nanti” = later.’},
-{cat:‘food’,en:‘Is the restaurant open?’,id:[‘Restoran’,‘buka’,‘atau’,‘tutup’],hint:’“Buka” = open. “Tutup” = closed. “Atau” = or.’},
-{cat:‘food’,en:‘The restaurant is full.’,id:[‘Restoran’,‘penuh’],hint:’“Penuh” = full.’},
-{cat:‘directions’,en:‘How many minutes?’,id:[‘Berapa’,‘menit’],hint:’“Menit” = minute.’},
-{cat:‘shopping’,en:‘Can I pay with card?’,id:[‘Bisa’,‘bayar’,‘dengan’,‘kartu’],hint:’“Dengan” = with. “Kartu” = card.’},
-{cat:‘shopping’,en:‘Do you have a smaller size?’,id:[‘Ada’,‘ukuran’,‘lebih’,‘kecil’],hint:’“Ukuran” = size. “Lebih kecil” = smaller.’},
+{cat:'greetings',en:'What time is it?',id:['Jam','berapa','sekarang'],hint:'"Jam" = hour/clock. "Sekarang" = now.'},
+{cat:'greetings',en:'I\'ll be there soon.',id:['Saya','datang','sebentar','lagi'],hint:'"Datang" = come. "Sebentar" = a moment.'},
+{cat:'greetings',en:'Please wait a moment.',id:['Tolong','tunggu','sebentar'],hint:'"Tunggu" = wait.'},
+{cat:'want',en:'I want to go tomorrow.',id:['Saya','mau','pergi','besok'],hint:'"Pergi" = go. "Besok" = tomorrow.'},
+{cat:'want',en:'I want to come later.',id:['Saya','mau','datang','nanti'],hint:'"Nanti" = later.'},
+{cat:'food',en:'Is the restaurant open?',id:['Restoran','buka','atau','tutup'],hint:'"Buka" = open. "Tutup" = closed. "Atau" = or.'},
+{cat:'food',en:'The restaurant is full.',id:['Restoran','penuh'],hint:'"Penuh" = full.'},
+{cat:'directions',en:'How many minutes?',id:['Berapa','menit'],hint:'"Menit" = minute.'},
+{cat:'shopping',en:'Can I pay with card?',id:['Bisa','bayar','dengan','kartu'],hint:'"Dengan" = with. "Kartu" = card.'},
+{cat:'shopping',en:'Do you have a smaller size?',id:['Ada','ukuran','lebih','kecil'],hint:'"Ukuran" = size. "Lebih kecil" = smaller.'},
 ],
 // ── LEVEL 10 ── Full tourist sentences
 [
-{cat:‘want’,en:‘I want to go to the airport tomorrow.’,id:[‘Saya’,‘mau’,‘ke’,‘bandara’,‘besok’],hint:’“Bandara” = airport. “Besok” = tomorrow.’},
-{cat:‘directions’,en:‘Can you show me on the map?’,id:[‘Bisa’,‘tunjuk’,‘di’,‘peta’],hint:’“Tunjuk” = show/point. “Peta” = map.’},
-{cat:‘food’,en:‘Table for two please.’,id:[‘Meja’,‘untuk’,‘dua’,‘orang’],hint:’“Meja” = table. “Orang” = person.’},
-{cat:‘food’,en:‘Do you have a vegetarian menu?’,id:[‘Ada’,‘menu’,‘vegetarian’],hint:’“Menu” = menu. Loanword!’},
-{cat:‘food’,en:‘I'm allergic to peanuts.’,id:[‘Saya’,‘alergi’,‘kacang’],hint:’“Alergi” = allergic. “Kacang” = peanuts.’},
-{cat:‘shopping’,en:‘Can I try it on?’,id:[‘Boleh’,‘coba’,‘dulu’],hint:’“Boleh” = may/allowed. “Coba” = try. “Dulu” = first.’},
-{cat:‘shopping’,en:‘I'm just looking.’,id:[‘Saya’,‘hanya’,‘melihat’],hint:’“Hanya” = just/only. “Melihat” = looking.’},
-{cat:‘greetings’,en:‘Nice to meet you.’,id:[‘Senang’,‘bertemu’,‘dengan’,‘kamu’],hint:’“Senang” = happy. “Bertemu” = to meet.’},
-{cat:‘want’,en:‘I want to take a photo here.’,id:[‘Saya’,‘mau’,‘foto’,‘di’,‘sini’],hint:’“Foto” = photo. Great for tourist spots!’},
-{cat:‘want’,en:‘Can you recommend a restaurant?’,id:[‘Bisa’,‘rekomendasikan’,‘restoran’],hint:’“Rekomendasikan” = recommend. Loanword!’},
+{cat:'want',en:'I want to go to the airport tomorrow.',id:['Saya','mau','ke','bandara','besok'],hint:'"Bandara" = airport. "Besok" = tomorrow.'},
+{cat:'directions',en:'Can you show me on the map?',id:['Bisa','tunjuk','di','peta'],hint:'"Tunjuk" = show/point. "Peta" = map.'},
+{cat:'food',en:'Table for two please.',id:['Meja','untuk','dua','orang'],hint:'"Meja" = table. "Orang" = person.'},
+{cat:'food',en:'Do you have a vegetarian menu?',id:['Ada','menu','vegetarian'],hint:'"Menu" = menu. Loanword!'},
+{cat:'food',en:'I\'m allergic to peanuts.',id:['Saya','alergi','kacang'],hint:'"Alergi" = allergic. "Kacang" = peanuts.'},
+{cat:'shopping',en:'Can I try it on?',id:['Boleh','coba','dulu'],hint:'"Boleh" = may/allowed. "Coba" = try. "Dulu" = first.'},
+{cat:'shopping',en:'I\'m just looking.',id:['Saya','hanya','melihat'],hint:'"Hanya" = just/only. "Melihat" = looking.'},
+{cat:'greetings',en:'Nice to meet you.',id:['Senang','bertemu','dengan','kamu'],hint:'"Senang" = happy. "Bertemu" = to meet.'},
+{cat:'want',en:'I want to take a photo here.',id:['Saya','mau','foto','di','sini'],hint:'"Foto" = photo. Great for tourist spots!'},
+{cat:'want',en:'Can you recommend a restaurant?',id:['Bisa','rekomendasikan','restoran'],hint:'"Rekomendasikan" = recommend. Loanword!'},
 ],
 ];
 
 const TIPS=[
-‘Indonesians love when tourists try — any effort gets big smiles.’,
-‘“Mau” (want) + anything is your most powerful phrase.’,
-‘Numbers: satu(1) dua(2) tiga(3) empat(4) lima(5) enam(6) tujuh(7) delapan(8) sembilan(9) sepuluh(10).’,
-‘“Bisa” (can) unlocks everything — “Bisa foto?” = Can I take a photo?’,
-‘“Berapa?” for every price. Then reply with “Terlalu mahal!” to negotiate.’,
-‘“Ada” (have/exist) works as a question: “Ada wifi?” “Ada menu bahasa Inggris?”’,
-‘Indonesian has no verb tenses — context tells you when. “Saya makan” = I eat/I ate/I'm eating.’,
-‘Repeating a word softens or pluralises it: “pelan-pelan” = slowly, “anak-anak” = children.’,
-‘Add “ya?” at the end to turn any statement into a question.’,
-‘“Tolong” (please/help) before any request makes it polite immediately.’,
+'Indonesians love when tourists try — any effort gets big smiles.',
+'"Mau" (want) + anything is your most powerful phrase.',
+'Numbers: satu(1) dua(2) tiga(3) empat(4) lima(5) enam(6) tujuh(7) delapan(8) sembilan(9) sepuluh(10).',
+'"Bisa" (can) unlocks everything — "Bisa foto?" = Can I take a photo?',
+'"Berapa?" for every price. Then reply with "Terlalu mahal!" to negotiate.',
+'"Ada" (have/exist) works as a question: "Ada wifi?" "Ada menu bahasa Inggris?"',
+'Indonesian has no verb tenses — context tells you when. "Saya makan" = I eat/I ate/I\'m eating.',
+'Repeating a word softens or pluralises it: "pelan-pelan" = slowly, "anak-anak" = children.',
+'Add "ya?" at the end to turn any statement into a question.',
+'"Tolong" (please/help) before any request makes it polite immediately.',
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────
-let diff=‘noob’;
+let diff='noob';
 let currentLevel=0;       // 0-indexed
 let maxUnlocked=0;        // highest unlocked level index
 let levelOrder=[];        // shuffled sentence indices for current level
-let levelIdx=0;           // position within current level’s order
+let levelIdx=0;           // position within current level\'s order
 let solvedInLevel=new Set(); // sentence indices solved at least once this level run
 let correctN=0, wrongN=0;
-let placed=[], checked=false, easyBlankIdx=0, easySelected=’’;
+let placed=[], checked=false, easyBlankIdx=0, easySelected='';
 
 // ── INIT ──────────────────────────────────────────────────────────
 function setDifficulty(d){
 diff=d;
-[‘noob’,‘easy’,‘hard’].forEach(x=>{
-document.getElementById(‘diff-’+x).className=‘diff-btn’+(x===d?’ active-’+x:’’);
+['noob','easy','hard'].forEach(x=>{
+document.getElementById('diff-'+x).className='diff-btn'+(x===d?' active-'+x:'');
 });
 if(levelOrder.length>0) loadSentence(); else startLevel(0);
 }
@@ -577,11 +577,11 @@ levelOrder=shuffle(LEVELS[lvlIdx].map((_,i)=>i));
 levelIdx=0;
 solvedInLevel=new Set();
 correctN=0; wrongN=0;
-document.getElementById(‘correct-count’).textContent=0;
-document.getElementById(‘wrong-count’).textContent=0;
-document.getElementById(‘level-complete’).style.display=‘none’;
-document.getElementById(‘unlock-banner’).classList.remove(‘show’);
-document.getElementById(‘main-card’).style.display=‘block’;
+document.getElementById('correct-count').textContent=0;
+document.getElementById('wrong-count').textContent=0;
+document.getElementById('level-complete').style.display='none';
+document.getElementById('unlock-banner').classList.remove('show');
+document.getElementById('main-card').style.display='block';
 renderLevelDots();
 updateLevelLabel();
 loadSentence();
@@ -591,27 +591,27 @@ function shuffle(a){return[...a].sort(()=>Math.random()-0.5);}
 
 // ── LEVEL DOTS ─────────────────────────────────────────────────────
 function renderLevelDots(){
-const container=document.getElementById(‘level-dots’);
-container.innerHTML=’’;
+const container=document.getElementById('level-dots');
+container.innerHTML='';
 for(let i=0;i<10;i++){
-const btn=document.createElement(‘button’);
-btn.className=‘level-dot’;
+const btn=document.createElement('button');
+btn.className='level-dot';
 const solved=getLevelSolvedCount(i);
 const isComplete=solved>=10;
 if(i>maxUnlocked){
-btn.classList.add(‘locked’);
+btn.classList.add('locked');
 btn.innerHTML=`<span class="dot-num">${i+1}</span><span class="dot-icon">🔒</span>`;
 btn.disabled=true;
 } else if(i===currentLevel){
-btn.classList.add(‘active-level’);
+btn.classList.add('active-level');
 btn.innerHTML=`<span class="dot-num">${i+1}</span><span class="dot-icon">▶</span>`;
 btn.onclick=()=>startLevel(i);
 } else if(isComplete){
-btn.classList.add(‘complete’);
+btn.classList.add('complete');
 btn.innerHTML=`<span class="dot-num">${i+1}</span><span class="dot-icon">✓</span>`;
 btn.onclick=()=>startLevel(i);
 } else {
-btn.classList.add(‘unlocked’);
+btn.classList.add('unlocked');
 btn.innerHTML=`<span class="dot-num">${i+1}</span><span class="dot-icon">○</span>`;
 btn.onclick=()=>startLevel(i);
 }
@@ -625,36 +625,36 @@ const levelSolved=Array(10).fill(null).map(()=>new Set());
 function getLevelSolvedCount(lvl){return levelSolved[lvl].size;}
 
 function updateLevelLabel(){
-document.getElementById(‘current-level-label’).textContent=currentLevel+1;
-document.getElementById(‘level-progress-label’).textContent=
+document.getElementById('current-level-label').textContent=currentLevel+1;
+document.getElementById('level-progress-label').textContent=
 `${solvedInLevel.size}/10 solved`;
 }
 
 // ── LOAD SENTENCE ─────────────────────────────────────────────────
 function loadSentence(){
 const s=sentences();
-placed=[]; checked=false; easySelected=’’;
+placed=[]; checked=false; easySelected='';
 
-document.getElementById(‘cat-tag’).textContent={
-greetings:‘👋 Greetings’,directions:‘📍 Directions’,
-food:‘🍜 Food & Drink’,want:‘🙏 Wants’,shopping:‘🛍️ Shopping’
+document.getElementById('cat-tag').textContent={
+greetings:'👋 Greetings',directions:'📍 Directions',
+food:'🍜 Food & Drink',want:'🙏 Wants',shopping:'🛍️ Shopping'
 }[s.cat];
 
-const badge=document.getElementById(‘diff-badge’);
-badge.textContent=diff; badge.className=‘diff-badge ‘+diff;
-document.getElementById(‘english-sentence’).textContent=s.en;
-document.getElementById(‘feedback’).className=‘feedback’;
-document.getElementById(‘feedback’).innerHTML=’’;
-document.getElementById(‘next-actions’).style.display=‘none’;
-document.getElementById(‘main-actions’).style.display=‘flex’;
-document.getElementById(‘unlock-banner’).classList.remove(‘show’);
+const badge=document.getElementById('diff-badge');
+badge.textContent=diff; badge.className='diff-badge '+diff;
+document.getElementById('english-sentence').textContent=s.en;
+document.getElementById('feedback').className='feedback';
+document.getElementById('feedback').innerHTML='';
+document.getElementById('next-actions').style.display='none';
+document.getElementById('main-actions').style.display='flex';
+document.getElementById('unlock-banner').classList.remove('show');
 
-[‘noob-preview’,‘easy-display’,‘easy-options’,‘build-area’,‘word-bank’].forEach(id=>{
-document.getElementById(id).style.display=‘none’;
+['noob-preview','easy-display','easy-options','build-area','word-bank'].forEach(id=>{
+document.getElementById(id).style.display='none';
 });
 
-if(diff===‘noob’) loadNoob(s);
-else if(diff===‘easy’) loadEasy(s);
+if(diff==='noob') loadNoob(s);
+else if(diff==='easy') loadEasy(s);
 else loadHard(s);
 
 updateProgress();
@@ -665,12 +665,12 @@ function sentences(){return LEVELS[currentLevel][levelOrder[levelIdx]];}
 
 // ── NOOB ──────────────────────────────────────────────────────────
 function loadNoob(s){
-const preview=document.getElementById(‘noob-preview’);
-preview.style.display=‘flex’;
+const preview=document.getElementById('noob-preview');
+preview.style.display='flex';
 preview.innerHTML=s.id.map(w=>{
 const t=tr(w);
 return`<div class="noob-word-block"><span class="noob-word">${w}</span>${t?`<span class="noob-trans">${t}</span>`:''}</div>`;
-}).join(’’);
+}).join('');
 showBuildArea(s,true);
 }
 
@@ -678,30 +678,30 @@ showBuildArea(s,true);
 function loadEasy(s){
 easyBlankIdx=s.id.length>1?(Math.floor(Math.random()*(s.id.length-1))+1):0;
 if(s.id.length===2)easyBlankIdx=1;
-const display=document.getElementById(‘easy-display’);
-display.style.display=‘flex’; display.style.borderColor=’’; display.style.background=’’;
+const display=document.getElementById('easy-display');
+display.style.display='flex'; display.style.borderColor=''; display.style.background='';
 display.innerHTML=s.id.map((w,i)=>
 i===easyBlankIdx?`<span class="easy-blank" id="easy-blank">?</span>`
 :`<span class="easy-fixed">${w}</span>`
-).join(’’);
+).join('');
 const correct=s.id[easyBlankIdx];
 const distractors=shuffle(getAllWords().filter(w=>w!==correct)).slice(0,3);
 const opts=shuffle([correct,...distractors]);
-const optEl=document.getElementById(‘easy-options’);
-optEl.style.display=‘flex’;
+const optEl=document.getElementById('easy-options');
+optEl.style.display='flex';
 optEl.innerHTML=opts.map(w=>{
 const t=tr(w);
 return`<button class="easy-opt" data-word="${w}" onclick="selectEasyOpt('${w}',this)"><span>${w}</span>${t?`<span class="opt-trans">${t}</span>`:''}</button>`;
-}).join(’’);
-document.getElementById(‘btn-clear’).style.visibility=‘hidden’;
+}).join('');
+document.getElementById('btn-clear').style.visibility='hidden';
 }
 
 function selectEasyOpt(word,btn){
 if(checked)return;
-document.querySelectorAll(’.easy-opt’).forEach(b=>b.classList.remove(‘selected’));
-btn.classList.add(‘selected’); easySelected=word;
-const blank=document.getElementById(‘easy-blank’);
-blank.textContent=word; blank.className=‘easy-blank filled’;
+document.querySelectorAll('.easy-opt').forEach(b=>b.classList.remove('selected'));
+btn.classList.add('selected'); easySelected=word;
+const blank=document.getElementById('easy-blank');
+blank.textContent=word; blank.className='easy-blank filled';
 }
 
 // ── HARD ──────────────────────────────────────────────────────────
@@ -710,11 +710,11 @@ showBuildArea(s,false);
 }
 
 function showBuildArea(s,showTr){
-const ba=document.getElementById(‘build-area’);
-ba.style.display=‘flex’; ba.className=‘build-area’;
-ba.innerHTML=’<span class="build-placeholder">Tap words below to build the sentence →</span>’;
-document.getElementById(‘word-bank’).style.display=‘flex’;
-document.getElementById(‘btn-clear’).style.visibility=‘visible’;
+const ba=document.getElementById('build-area');
+ba.style.display='flex'; ba.className='build-area';
+ba.innerHTML='<span class="build-placeholder">Tap words below to build the sentence →</span>';
+document.getElementById('word-bank').style.display='flex';
+document.getElementById('btn-clear').style.visibility='visible';
 buildBank(s,showTr);
 }
 
@@ -723,11 +723,11 @@ function getAllWords(){return LEVELS.flatMap(lvl=>lvl.flatMap(s=>s.id));}
 function buildBank(s,showTr){
 const distractors=shuffle(getAllWords().filter(w=>!s.id.includes(w))).slice(0,Math.min(3,s.id.length));
 const words=shuffle([...s.id,...distractors]);
-const wb=document.getElementById(‘word-bank’);
-wb.innerHTML=’’;
+const wb=document.getElementById('word-bank');
+wb.innerHTML='';
 words.forEach((w,i)=>{
-const btn=document.createElement(‘button’);
-btn.className=‘word-chip’; btn.dataset.index=i;
+const btn=document.createElement('button');
+btn.className='word-chip'; btn.dataset.index=i;
 const t=tr(w);
 btn.innerHTML=`<span>${w}</span>${showTr&&t?`<span class="chip-trans">${t}</span>`:''}`;
 btn.onclick=()=>tapWord(w,i,btn,showTr);
@@ -737,24 +737,24 @@ wb.appendChild(btn);
 
 // ── TAP / PLACE ────────────────────────────────────────────────────
 function tapWord(word,index,btn,showTr){
-if(checked||btn.classList.contains(‘used’))return;
-btn.classList.add(‘used’);
+if(checked||btn.classList.contains('used'))return;
+btn.classList.add('used');
 placed.push({word,chipIndex:index});
-renderBuild(showTr!==undefined?showTr:diff===‘noob’);
+renderBuild(showTr!==undefined?showTr:diff==='noob');
 }
 
 function renderBuild(showTr){
-const st=showTr!==undefined?showTr:(diff===‘noob’);
-const area=document.getElementById(‘build-area’);
+const st=showTr!==undefined?showTr:(diff==='noob');
+const area=document.getElementById('build-area');
 if(placed.length===0){
-area.className=‘build-area’;
-area.innerHTML=’<span class="build-placeholder">Tap words below to build the sentence →</span>’;
+area.className='build-area';
+area.innerHTML='<span class="build-placeholder">Tap words below to build the sentence →</span>';
 return;
 }
-area.className=‘build-area has-words’; area.innerHTML=’’;
+area.className='build-area has-words'; area.innerHTML='';
 placed.forEach((item,i)=>{
-const span=document.createElement(‘span’);
-span.className=‘placed-word’;
+const span=document.createElement('span');
+span.className='placed-word';
 const t=tr(item.word);
 span.innerHTML=`<span>${item.word}</span>${st&&t?`<span class="ptrans">${t}</span>`:''}`;
 span.onclick=()=>removePlaced(i,st);
@@ -765,8 +765,8 @@ area.appendChild(span);
 function removePlaced(i,showTr){
 if(checked)return;
 const removed=placed.splice(i,1)[0];
-document.querySelectorAll(’.word-chip’).forEach(b=>{
-if(parseInt(b.dataset.index)===removed.chipIndex)b.classList.remove(‘used’);
+document.querySelectorAll('.word-chip').forEach(b=>{
+if(parseInt(b.dataset.index)===removed.chipIndex)b.classList.remove('used');
 });
 renderBuild(showTr);
 }
@@ -774,58 +774,58 @@ renderBuild(showTr);
 function clearAnswer(){
 if(checked)return;
 placed=[];
-document.querySelectorAll(’.word-chip’).forEach(b=>b.classList.remove(‘used’));
+document.querySelectorAll('.word-chip').forEach(b=>b.classList.remove('used'));
 renderBuild();
-document.getElementById(‘feedback’).className=‘feedback’;
+document.getElementById('feedback').className='feedback';
 }
 
 // ── CHECK ──────────────────────────────────────────────────────────
 function checkAnswer(){
 const s=sentences();
-const fb=document.getElementById(‘feedback’);
-if(diff===‘easy’){
-if(!easySelected){fb.className=‘feedback hint’;fb.textContent=‘💡 Tap a word to fill the blank first!’;return;}
+const fb=document.getElementById('feedback');
+if(diff==='easy'){
+if(!easySelected){fb.className='feedback hint';fb.textContent='💡 Tap a word to fill the blank first!';return;}
 checked=true;
 const correct=s.id[easyBlankIdx];
-const blank=document.getElementById(‘easy-blank’);
-const display=document.getElementById(‘easy-display’);
+const blank=document.getElementById('easy-blank');
+const display=document.getElementById('easy-display');
 if(easySelected===correct){
-blank.className=‘easy-blank correct-b’;
-display.style.borderColor=‘var(--correct)’; display.style.background=‘rgba(45,138,78,0.06)’;
-fb.className=‘feedback correct’;
+blank.className='easy-blank correct-b';
+display.style.borderColor='var(--correct)'; display.style.background='rgba(45,138,78,0.06)';
+fb.className='feedback correct';
 fb.innerHTML=`✅ <strong>Betul!</strong> "${s.id.join(' ')}" — perfect!`;
-markSolved(); correctN++; document.getElementById(‘correct-count’).textContent=correctN;
+markSolved(); correctN++; document.getElementById('correct-count').textContent=correctN;
 } else {
-blank.className=‘easy-blank wrong-b’;
-display.style.borderColor=‘var(--wrong)’; display.style.background=‘rgba(196,48,48,0.04)’;
-fb.className=‘feedback wrong’;
+blank.className='easy-blank wrong-b';
+display.style.borderColor='var(--wrong)'; display.style.background='rgba(196,48,48,0.04)';
+fb.className='feedback wrong';
 fb.innerHTML=`❌ The missing word was: <strong>${correct}</strong> — "${s.id.join(' ')}"`;
-wrongN++; document.getElementById(‘wrong-count’).textContent=wrongN;
+wrongN++; document.getElementById('wrong-count').textContent=wrongN;
 }
-document.querySelectorAll(’.easy-opt’).forEach(b=>{
-if(b.dataset.word===correct){b.style.borderColor=‘var(--correct)’;b.style.color=‘var(--correct)’;}
-else b.classList.add(‘used-opt’);
+document.querySelectorAll('.easy-opt').forEach(b=>{
+if(b.dataset.word===correct){b.style.borderColor='var(--correct)';b.style.color='var(--correct)';}
+else b.classList.add('used-opt');
 });
 } else {
-if(placed.length===0){fb.className=‘feedback hint’;fb.textContent=‘💡 Tap the words below to build the sentence first!’;return;}
+if(placed.length===0){fb.className='feedback hint';fb.textContent='💡 Tap the words below to build the sentence first!';return;}
 checked=true;
-const attempt=placed.map(p=>p.word).join(’ ‘);
-const correct=s.id.join(’ ’);
-const ba=document.getElementById(‘build-area’);
+const attempt=placed.map(p=>p.word).join(' ');
+const correct=s.id.join(' ');
+const ba=document.getElementById('build-area');
 if(attempt===correct){
-ba.classList.add(‘correct’);
-fb.className=‘feedback correct’;
+ba.classList.add('correct');
+fb.className='feedback correct';
 fb.innerHTML=`✅ <strong>Betul!</strong> "${correct}" — well done!`;
-markSolved(); correctN++; document.getElementById(‘correct-count’).textContent=correctN;
+markSolved(); correctN++; document.getElementById('correct-count').textContent=correctN;
 } else {
-ba.classList.add(‘wrong’);
-fb.className=‘feedback wrong’;
+ba.classList.add('wrong');
+fb.className='feedback wrong';
 fb.innerHTML=`❌ Not quite. The answer is: <strong>${correct}</strong>`;
-wrongN++; document.getElementById(‘wrong-count’).textContent=wrongN;
+wrongN++; document.getElementById('wrong-count').textContent=wrongN;
 }
 }
-document.getElementById(‘main-actions’).style.display=‘none’;
-document.getElementById(‘next-actions’).style.display=‘flex’;
+document.getElementById('main-actions').style.display='none';
+document.getElementById('next-actions').style.display='flex';
 updateProgress();
 updateLevelLabel();
 }
@@ -839,9 +839,9 @@ levelSolved[currentLevel].add(sentIdx);
 function showHint(){
 if(checked)return;
 const s=sentences();
-const fb=document.getElementById(‘feedback’);
-fb.className=‘feedback hint’;
-if(diff===‘easy’){
+const fb=document.getElementById('feedback');
+fb.className='feedback hint';
+if(diff==='easy'){
 const missing=s.id[easyBlankIdx];
 const t=tr(missing);
 fb.innerHTML=`💡 <strong>Hint:</strong> The missing word means "${t||'?'}"`;
@@ -852,7 +852,7 @@ fb.innerHTML=`💡 <strong>Hint:</strong> ${s.hint} (${s.id.length} word${s.id.l
 
 // ── NEXT ──────────────────────────────────────────────────────────
 function nextSentence(){
-document.getElementById(‘unlock-banner’).classList.remove(‘show’);
+document.getElementById('unlock-banner').classList.remove('show');
 
 // Check if all 10 sentences solved at least once
 if(solvedInLevel.size>=10){
@@ -860,7 +860,7 @@ showLevelComplete();
 return;
 }
 
-// Advance to next sentence; if we’ve exhausted the shuffled order, reshuffle unsolved
+// Advance to next sentence; if we\'ve exhausted the shuffled order, reshuffle unsolved
 levelIdx++;
 if(levelIdx>=levelOrder.length){
 // Reshuffle only unsolved sentences to fill gaps
@@ -876,15 +876,15 @@ loadSentence();
 
 // ── LEVEL COMPLETE ─────────────────────────────────────────────────
 function showLevelComplete(){
-document.getElementById(‘main-card’).style.display=‘none’;
-const lc=document.getElementById(‘level-complete’);
-lc.style.display=‘block’;
-document.getElementById(‘lc-title’).textContent=`Level ${currentLevel+1} Complete!`;
-document.getElementById(‘lc-sub’).textContent=`You solved all 10 phrases on level ${currentLevel+1}. Bagus sekali!`;
-document.getElementById(‘tip-text’).textContent=TIPS[currentLevel];
+document.getElementById('main-card').style.display='none';
+const lc=document.getElementById('level-complete');
+lc.style.display='block';
+document.getElementById('lc-title').textContent=`Level ${currentLevel+1} Complete!`;
+document.getElementById('lc-sub').textContent=`You solved all 10 phrases on level ${currentLevel+1}. Bagus sekali!`;
+document.getElementById('tip-text').textContent=TIPS[currentLevel];
 
 const isLastLevel=currentLevel>=9;
-const advBtn=document.getElementById(‘btn-advance’);
+const advBtn=document.getElementById('btn-advance');
 
 if(!isLastLevel){
 // Unlock next level
@@ -892,17 +892,17 @@ const nextLvl=currentLevel+1;
 if(nextLvl>maxUnlocked){
 maxUnlocked=nextLvl;
 // Show unlock banner briefly
-const banner=document.getElementById(‘unlock-banner’);
-document.getElementById(‘unlock-title’).textContent=`Level ${nextLvl+1} Unlocked!`;
-document.getElementById(‘unlock-sub’).textContent=`10 new phrases ready. Keep going!`;
-banner.classList.add(‘show’);
+const banner=document.getElementById('unlock-banner');
+document.getElementById('unlock-title').textContent=`Level ${nextLvl+1} Unlocked!`;
+document.getElementById('unlock-sub').textContent=`10 new phrases ready. Keep going!`;
+banner.classList.add('show');
 }
-advBtn.textContent=‘Next level →’;
+advBtn.textContent='Next level →';
 advBtn.disabled=false;
 } else {
-advBtn.textContent=‘🎉 All done!’;
+advBtn.textContent='🎉 All done!';
 advBtn.disabled=true;
-document.getElementById(‘lc-sub’).textContent=‘You've completed all 100 phrases. Luar biasa!’;
+document.getElementById('lc-sub').textContent='You\'ve completed all 100 phrases. Luar biasa!';
 }
 
 renderLevelDots();
@@ -913,19 +913,19 @@ if(currentLevel<9)startLevel(currentLevel+1);
 }
 
 function replayLevel(){
-document.getElementById(‘level-complete’).style.display=‘none’;
+document.getElementById('level-complete').style.display='none';
 startLevel(currentLevel);
 }
 
 // ── PROGRESS ──────────────────────────────────────────────────────
 function updateProgress(){
 const pct=(solvedInLevel.size/10)*100;
-document.getElementById(‘progress-fill’).style.width=pct+’%’;
-document.getElementById(‘sentence-counter’).textContent=`${solvedInLevel.size}/10 solved`;
+document.getElementById('progress-fill').style.width=pct+'%';
+document.getElementById('sentence-counter').textContent=`${solvedInLevel.size}/10 solved`;
 }
 
 // ── BOOT ──────────────────────────────────────────────────────────
-setDifficulty(‘noob’);
+setDifficulty('noob');
 </script>
 
 </body>
