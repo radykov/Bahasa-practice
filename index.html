@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bahasa Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand:#F5EDD8; --warm:#E8D5B0; --terracotta:#C4622D; --terracotta-dark:#9E4A1E;
+    --jungle:#2D5E3A; --jungle-light:#3D7A4E; --sky:#4A90C4;
+    --ink:#1C1C1C; --muted:#7A6E5F; --correct:#2D8A4E; --wrong:#C43030;
+    --noob:#7B5EA7; --easy:#2D7AB5; --hard:#C4622D;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);min-height:100vh;color:var(--ink);overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 20% 20%,rgba(196,98,45,0.06) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(45,94,58,0.06) 0%,transparent 50%);pointer-events:none;z-index:0;}
+  .container{max-width:640px;margin:0 auto;padding:0 20px 40px;position:relative;z-index:1;}
+
+/* HEADER */
+header{padding:24px 0 16px;text-align:center;border-bottom:2px solid var(–warm);margin-bottom:16px;}
+.flag-strip{display:flex;justify-content:center;gap:6px;margin-bottom:10px;}
+.flag-strip span{width:24px;height:5px;border-radius:2px;}
+.flag-strip .red{background:#CE1126;} .flag-strip .white{background:#fff;border:1px solid #ddd;}
+header h1{font-family:‘Playfair Display’,serif;font-size:2rem;font-weight:900;color:var(–terracotta);letter-spacing:-0.5px;line-height:1;}
+header h1 span{color:var(–jungle);}
+header p{margin-top:5px;font-size:0.78rem;color:var(–muted);letter-spacing:0.5px;text-transform:uppercase;}
+
+/* DIFFICULTY */
+.difficulty-row{display:flex;gap:8px;margin-bottom:14px;background:white;border-radius:14px;padding:5px;border:1.5px solid var(–warm);}
+.diff-btn{flex:1;padding:8px 6px 6px;border-radius:10px;border:none;font-family:‘DM Sans’,sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;color:var(–muted);background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.2;}
+.diff-btn .diff-icon{font-size:1rem;}
+.diff-btn .diff-sub{font-size:0.62rem;font-weight:400;color:var(–muted);}
+.diff-btn:hover:not([class*=“active”]){background:var(–sand);}
+.diff-btn.active-noob{background:rgba(123,94,167,0.12);color:var(–noob);}
+.diff-btn.active-noob .diff-sub{color:var(–noob);opacity:.75;}
+.diff-btn.active-easy{background:rgba(45,122,181,0.12);color:var(–easy);}
+.diff-btn.active-easy .diff-sub{color:var(–easy);opacity:.75;}
+.diff-btn.active-hard{background:rgba(196,98,45,0.12);color:var(–hard);}
+.diff-btn.active-hard .diff-sub{color:var(–hard);opacity:.75;}
+
+/* LEVEL BAR */
+.level-bar-wrap{margin-bottom:14px;}
+.level-bar-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.level-bar-label span{font-size:0.8rem;color:var(–muted);font-weight:500;}
+.level-bar-label strong{font-size:0.8rem;color:var(–ink);}
+.level-dots{display:flex;gap:6px;flex-wrap:wrap;}
+.level-dot{
+width:42px;height:42px;border-radius:10px;border:none;
+font-family:‘DM Sans’,sans-serif;font-size:0.75rem;font-weight:700;
+cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+}
+.level-dot.locked{background:var(–warm);color:#bbb;cursor:not-allowed;border:1.5px solid var(–warm);}
+.level-dot.unlocked{background:white;color:var(–muted);border:1.5px solid var(–warm);}
+.level-dot.unlocked:hover{border-color:var(–terracotta);color:var(–terracotta);}
+.level-dot.complete{background:rgba(45,138,78,0.1);color:var(–correct);border:1.5px solid rgba(45,138,78,0.3);}
+.level-dot.complete:hover{background:rgba(45,138,78,0.18);}
+.level-dot.active-level{background:var(–terracotta);color:white;border:1.5px solid var(–terracotta);box-shadow:0 3px 10px rgba(196,98,45,0.3);}
+.level-dot .dot-num{font-size:0.82rem;font-weight:700;}
+.level-dot .dot-icon{font-size:0.7rem;line-height:1;}
+
+/* PROGRESS */
+.progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.score-badge{display:flex;align-items:center;gap:12px;}
+.score-item{display:flex;align-items:center;gap:5px;font-size:0.78rem;font-weight:500;color:var(–muted);}
+.score-dot{width:7px;height:7px;border-radius:50%;}
+.score-dot.green{background:var(–correct);} .score-dot.red{background:var(–wrong);}
+.counter{font-size:0.78rem;color:var(–muted);}
+.progress-bar{height:4px;background:var(–warm);border-radius:2px;margin-bottom:16px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(–terracotta),var(–jungle-light));border-radius:2px;transition:width 0.5s ease;}
+
+/* CARD */
+.sentence-card{background:white;border-radius:20px;padding:20px 20px 16px;box-shadow:0 4px 24px rgba(28,28,28,0.08),0 1px 4px rgba(28,28,28,0.04);margin-bottom:16px;border:1.5px solid rgba(196,98,45,0.1);}
+.card-top{display:flex;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
+.category-tag{display:inline-block;font-size:0.67rem;font-weight:500;text-transform:uppercase;letter-spacing:0.8px;color:var(–terracotta);background:rgba(196,98,45,0.08);padding:3px 9px;border-radius:8px;}
+.diff-badge{display:inline-block;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;padding:2px 8px;border-radius:8px;}
+.diff-badge.noob{background:rgba(123,94,167,0.1);color:var(–noob);}
+.diff-badge.easy{background:rgba(45,122,181,0.1);color:var(–easy);}
+.diff-badge.hard{background:rgba(196,98,45,0.1);color:var(–hard);}
+.english-sentence{font-size:1.22rem;font-family:‘Playfair Display’,serif;font-weight:700;color:var(–ink);line-height:1.4;margin-bottom:16px;}
+
+/* NOOB PREVIEW */
+.noob-preview{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:11px 13px;background:rgba(123,94,167,0.05);border-radius:12px;border:1.5px solid rgba(123,94,167,0.15);}
+.noob-word-block{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.noob-word{font-size:0.9rem;font-weight:600;color:var(–ink);}
+.noob-trans{font-size:0.6rem;color:var(–noob);font-style:italic;text-align:center;max-width:68px;}
+
+/* EASY */
+.easy-display{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;padding:11px 13px;background:rgba(45,122,181,0.05);border-radius:12px;border:1.5px solid rgba(45,122,181,0.2);min-height:50px;transition:all 0.3s;}
+.easy-fixed{font-size:0.92rem;font-weight:600;color:var(–ink);background:white;border:1.5px solid var(–warm);padding:4px 10px;border-radius:8px;}
+.easy-blank{display:inline-flex;align-items:center;justify-content:center;min-width:72px;height:34px;border-radius:8px;border:2px dashed var(–easy);background:rgba(45,122,181,0.06);padding:3px 11px;font-size:0.88rem;font-weight:600;color:var(–easy);transition:all 0.2s;cursor:pointer;}
+.easy-blank.filled{border-style:solid;border-color:var(–easy);background:var(–easy);color:white;}
+.easy-blank.correct-b{border-color:var(–correct)!important;background:var(–correct)!important;color:white!important;}
+.easy-blank.wrong-b{border-color:var(–wrong)!important;background:rgba(196,48,48,0.08)!important;color:var(–wrong)!important;}
+.easy-options{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.easy-opt{background:white;border:1.5px solid var(–warm);color:var(–ink);padding:6px 13px 5px;border-radius:10px;font-size:0.86rem;font-weight:500;cursor:pointer;transition:all 0.15s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:‘DM Sans’,sans-serif;}
+.easy-opt .opt-trans{font-size:0.6rem;color:var(–muted);font-style:italic;font-weight:400;}
+.easy-opt:hover:not(.used-opt){border-color:var(–easy);color:var(–easy);transform:translateY(-2px);box-shadow:0 3px 10px rgba(45,122,181,0.15);}
+.easy-opt.selected{border-color:var(–easy);background:rgba(45,122,181,0.1);color:var(–easy);}
+.easy-opt.used-opt{opacity:.3;cursor:not-allowed;}
+
+/* BUILD AREA */
+.build-area{min-height:54px;background:var(–sand);border-radius:12px;padding:10px 13px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border:2px dashed var(–warm);transition:border-color 0.2s;margin-bottom:13px;}
+.build-area.has-words{border-style:solid;border-color:rgba(196,98,45,0.25);}
+.build-area.correct{border-color:var(–correct);background:rgba(45,138,78,0.06);animation:correctPulse 0.4s ease;}
+.build-area.wrong{border-color:var(–wrong);background:rgba(196,48,48,0.05);animation:shake 0.4s ease;}
+@keyframes correctPulse{0%{transform:scale(1)}50%{transform:scale(1.01)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes popIn{0%{transform:scale(0.85);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes unlockPop{0%{transform:scale(0.8);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.build-placeholder{font-size:0.82rem;color:var(–muted);font-style:italic;}
+.placed-word{display:flex;flex-direction:column;align-items:center;gap:2px;background:var(–terracotta);color:white;padding:5px 10px 4px;border-radius:8px;font-size:0.86rem;font-weight:500;cursor:pointer;transition:all 0.15s;animation:popIn 0.15s ease;}
+.placed-word:hover{background:var(–terracotta-dark);transform:translateY(-1px);}
+.placed-word .ptrans{font-size:0.58rem;font-style:italic;opacity:.82;font-weight:400;}
+.word-bank{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.word-chip{background:white;border:1.5px solid var(–warm);color:var(–ink);padding:6px 12px 4px;border-radius:10px;font-size:0.86rem;font-weight:500;cursor:pointer;transition:all 0.15s;user-select:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:‘DM Sans’,sans-serif;}
+.word-chip .chip-trans{font-size:0.59rem;color:var(–muted);font-style:italic;font-weight:400;}
+.word-chip:hover:not(.used){border-color:var(–terracotta);color:var(–terracotta);transform:translateY(-2px);box-shadow:0 3px 10px rgba(196,98,45,0.15);}
+.word-chip.used{opacity:.28;cursor:not-allowed;transform:none;}
+
+/* ACTIONS */
+.actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{padding:9px 16px;border-radius:10px;border:none;font-family:‘DM Sans’,sans-serif;font-size:0.84rem;font-weight:500;cursor:pointer;transition:all 0.2s;}
+.btn-check{background:var(–jungle);color:white;flex:1;}
+.btn-check:hover{background:var(–jungle-light);}
+.btn-hint{background:rgba(74,144,196,0.12);color:var(–sky);border:1.5px solid rgba(74,144,196,0.3);}
+.btn-hint:hover{background:rgba(74,144,196,0.2);}
+.btn-next{background:var(–terracotta);color:white;flex:1;}
+.btn-next:hover{background:var(–terracotta-dark);}
+.btn-clear{background:rgba(122,110,95,0.1);color:var(–muted);}
+.btn-clear:hover{background:rgba(122,110,95,0.18);}
+
+/* FEEDBACK */
+.feedback{margin-top:12px;padding:11px 14px;border-radius:12px;font-size:0.86rem;line-height:1.5;display:none;animation:fadeIn 0.3s ease;}
+.feedback.correct{background:rgba(45,138,78,0.1);border:1.5px solid rgba(45,138,78,0.3);color:var(–correct);display:block;}
+.feedback.wrong{background:rgba(196,48,48,0.08);border:1.5px solid rgba(196,48,48,0.25);color:var(–wrong);display:block;}
+.feedback.hint{background:rgba(74,144,196,0.08);border:1.5px solid rgba(74,144,196,0.25);color:var(–sky);display:block;}
+.feedback strong{font-weight:600;}
+
+/* UNLOCK BANNER */
+.unlock-banner{display:none;background:linear-gradient(135deg,var(–jungle),var(–jungle-light));color:white;border-radius:16px;padding:18px 20px;margin-bottom:16px;text-align:center;animation:unlockPop 0.5s ease;}
+.unlock-banner.show{display:block;}
+.unlock-banner .ub-emoji{font-size:2rem;margin-bottom:6px;}
+.unlock-banner h3{font-family:‘Playfair Display’,serif;font-size:1.3rem;margin-bottom:4px;}
+.unlock-banner p{font-size:0.82rem;opacity:0.85;}
+
+/* LEVEL COMPLETE */
+.level-complete{display:none;text-align:center;padding:36px 20px;background:white;border-radius:20px;box-shadow:0 4px 24px rgba(28,28,28,0.08);animation:fadeIn 0.4s ease;}
+.level-complete.show{display:block;}
+.level-complete .emoji{font-size:2.8rem;margin-bottom:10px;}
+.level-complete h2{font-family:‘Playfair Display’,serif;font-size:1.7rem;color:var(–terracotta);margin-bottom:6px;}
+.level-complete p{color:var(–muted);margin-bottom:18px;font-size:0.9rem;}
+.tip-box{background:var(–sand);border-radius:12px;padding:13px 16px;text-align:left;margin:0 0 18px;}
+.tip-box .tip-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.8px;color:var(–terracotta);font-weight:600;margin-bottom:5px;}
+.tip-box p{font-size:0.86rem;color:var(–ink);line-height:1.5;margin:0;}
+.lc-btns{display:flex;gap:10px;}
+.btn-replay{background:rgba(122,110,95,0.1);color:var(–muted);flex:1;}
+.btn-replay:hover{background:rgba(122,110,95,0.18);}
+.btn-advance{background:var(–terracotta);color:white;flex:1;}
+.btn-advance:hover{background:var(–terracotta-dark);}
+.btn-advance:disabled{background:var(–muted);cursor:not-allowed;}
+</style>
+
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="flag-strip">
+      <span class="red"></span><span class="red"></span><span class="red"></span>
+      <span class="white"></span><span class="white"></span><span class="white"></span>
+    </div>
+    <h1>Bahasa <span>Dasar</span></h1>
+    <p>100 Tourist survival phrases · 10 levels</p>
+  </header>
+
+  <!-- DIFFICULTY -->
+
+  <div class="difficulty-row">
+    <button class="diff-btn" id="diff-noob" onclick="setDifficulty('noob')">
+      <span class="diff-icon">🌱</span><span>Noob</span><span class="diff-sub">translations shown</span>
+    </button>
+    <button class="diff-btn" id="diff-easy" onclick="setDifficulty('easy')">
+      <span class="diff-icon">☀️</span><span>Easy</span><span class="diff-sub">fill the blank</span>
+    </button>
+    <button class="diff-btn" id="diff-hard" onclick="setDifficulty('hard')">
+      <span class="diff-icon">🔥</span><span>Hard</span><span class="diff-sub">whole sentence</span>
+    </button>
+  </div>
+
+  <!-- LEVEL SELECTOR -->
+
+  <div class="level-bar-wrap">
+    <div class="level-bar-label">
+      <span>Level <strong id="current-level-label">1</strong> of 10</span>
+      <span id="level-progress-label">0/10 solved</span>
+    </div>
+    <div class="level-dots" id="level-dots"></div>
+  </div>
+
+  <!-- SCORE + PROGRESS -->
+
+  <div class="progress-row">
+    <div class="score-badge">
+      <div class="score-item"><span class="score-dot green"></span><span id="correct-count">0</span> correct</div>
+      <div class="score-item"><span class="score-dot red"></span><span id="wrong-count">0</span> wrong</div>
+    </div>
+    <div class="counter" id="sentence-counter">1 / 10</div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+  <!-- UNLOCK BANNER -->
+
+  <div class="unlock-banner" id="unlock-banner">
+    <div class="ub-emoji">🔓</div>
+    <h3 id="unlock-title">Level 2 Unlocked!</h3>
+    <p id="unlock-sub">10 new phrases added. Keep going!</p>
+  </div>
+
+  <!-- MAIN CARD -->
+
+  <div id="main-card" class="sentence-card">
+    <div class="card-top">
+      <span class="category-tag" id="cat-tag">—</span>
+      <span class="diff-badge noob" id="diff-badge">noob</span>
+    </div>
+    <div class="english-sentence" id="english-sentence">Loading…</div>
+
+```
+<div id="noob-preview" class="noob-preview" style="display:none"></div>
+<div id="easy-display" class="easy-display" style="display:none"></div>
+<div id="easy-options" class="easy-options" style="display:none"></div>
+<div id="build-area" class="build-area" style="display:none">
+  <span class="build-placeholder">Tap words below to build the sentence →</span>
+</div>
+<div id="word-bank" class="word-bank" style="display:none"></div>
+
+<div class="actions" id="main-actions">
+  <button class="btn btn-clear" id="btn-clear" onclick="clearAnswer()">↺ Clear</button>
+  <button class="btn btn-hint" onclick="showHint()">💡 Hint</button>
+  <button class="btn btn-check" onclick="checkAnswer()">Check ✓</button>
+</div>
+<div class="feedback" id="feedback"></div>
+<div class="actions" style="margin-top:10px;display:none" id="next-actions">
+  <button class="btn btn-next" onclick="nextSentence()">Next →</button>
+</div>
+```
+
+  </div>
+
+  <!-- LEVEL COMPLETE -->
+
+  <div class="level-complete" id="level-complete">
+    <div class="emoji">🌴</div>
+    <h2 id="lc-title">Level 1 Complete!</h2>
+    <p id="lc-sub">You've solved all 10 phrases. Bagus sekali!</p>
+    <div class="tip-box">
+      <div class="tip-label">✨ Survival tip</div>
+      <p id="tip-text"></p>
+    </div>
+    <div class="lc-btns">
+      <button class="btn btn-replay" onclick="replayLevel()">↺ Replay level</button>
+      <button class="btn btn-advance" id="btn-advance" onclick="goNextLevel()">Next level →</button>
+    </div>
+  </div>
+
+</div>
+<script>
+// ── TRANSLATIONS ──────────────────────────────────────────────────
+const TR={
+  'Ada':'have/exist','ada':'have/exist',
+  'Air':'water','air':'water',
+  'alergi':'allergic',
+  'ambil':'take',
+  'ambulans':'ambulance',
+  'Apa':'what','apa':'what',
+  'asin':'salty',
+  'atau':'or',
+  'bandara':'airport',
+  'bantu':'help (verb)',
+  'bantuan':'help',
+  'banyak':'a lot',
+  'bayar':'pay',
+  'Belok':'turn','belok':'turn',
+  'Berapa':'how much','berapa':'how much',
+  'Berhenti':'stop',
+  'bertemu':'meet',
+  'besok':'tomorrow',
+  'bicara':'speak',
+  'Bisa':'can',
+  'Boleh':'may/allowed',
+  'bon':'bill',
+  'buka':'open',
+  'butuh':'need',
+  'coba':'try',
+  'daging':'meat',
+  'dari':'from',
+  'datang':'come',
+  'Dekat':'near','dekat':'near',
+  'demam':'fever',
+  'dengan':'with',
+  'Di':'at/in','di':'at/in',
+  'dingin':'cold',
+  'dokter':'doctor',
+  'dua':'two',
+  'dulu':'first/yet',
+  'Enak':'delicious','enak':'delicious',
+  'foto':'photo',
+  'Halo':'hello',
+  'handuk':'towel',
+  'hanya':'only/just',
+  'harga':'price',
+  'hilang':'lost',
+  'hotel':'hotel',
+  'Ini':'this','ini':'this',
+  'Itu':'that','itu':'that',
+  'Jalan':'road/walk',
+  'Jam':'hour/clock',
+  'Jangan':"don't",
+  'Jauh':'far','jauh':'far',
+  'kabar':'news',
+  'kacang':'peanuts',
+  'kamar':'room',
+  'kamu':'you',
+  'Kanan':'right','kanan':'right',
+  'kartu':'card',
+  'kasih':'love',
+  'ke':'to',
+  'kecil':'small',
+  'kembalian':'change (money)',
+  'Kiri':'left','kiri':'left',
+  'kunci':'key',
+  'kurang':'less',
+  'lagi':'more/again',
+  'lebih':'more',
+  'Maaf':'sorry',
+  'Mahal':'expensive','mahal':'expensive',
+  'makan':'eat','Makan':'eat',
+  'mana':'where',
+  'manis':'sweet',
+  'mau':'want','Mau':'want',
+  'Meja':'table',
+  'melihat':'looking',
+  'mengerti':'understand',
+  'menit':'minute',
+  'menu':'menu',
+  'Minta':'ask for',
+  'minum':'drink',
+  'Murah':'cheap','murah':'cheap',
+  'Nama':'name','nama':'name',
+  'nanti':'later',
+  'obat':'medicine',
+  'orang':'person',
+  'pagi':'morning',
+  'panas':'hot',
+  'panggil':'call',
+  'pantai':'beach',
+  'pasar':'market',
+  'Pedas':'spicy','pedas':'spicy',
+  'pelan':'slowly',
+  'penuh':'full',
+  'pergi':'go',
+  'Permisi':'excuse me',
+  'pesan':'order/book',
+  'peta':'map',
+  'polisi':'police',
+  'pulang':'go home',
+  'rekomendasikan':'recommend',
+  'Restoran':'restaurant','restoran':'restaurant',
+  'rumah':'house',
+  'Sakit':'sick/pain','sakit':'sick/pain',
+  'Sama':'same','sama':'same',
+  'Satu':'one',
+  'Saya':'I/me/my','saya':'I/me/my',
+  'sebentar':'a moment',
+  'sekarang':'now',
+  'Selamat':'safe/happy',
+  'selimut':'blanket',
+  'Senang':'happy',
+  'sini':'here',
+  'sudah':'already',
+  'Tanpa':'without',
+  'Tas':'bag','tas':'bag',
+  'Terima':'receive',
+  'Terlalu':'too much',
+  'terus':'straight on',
+  'tidak':'not/no','Tidak':'not/no',
+  'tidur':'sleep',
+  'toilet':'toilet',
+  'Tolong':'please/help',
+  'tunjuk':'point/show',
+  'tunggu':'wait',
+  'tutup':'closed',
+  'ukuran':'size',
+  'untuk':'for',
+  'vegetarian':'vegetarian',
+};
+function tr(w){return TR[w]||TR[w.replace(/[!?,.]$/,'')]||'';}
+
+// ── 100 SENTENCES across 10 levels ───────────────────────────────
+// Level 1-2: ultra basic single/two word, greetings, core survival
+// Level 3-4: short phrases 2-3 words
+// Level 5-6: 3-4 words, food/directions
+// Level 7-8: 4-5 words, wants/shopping
+// Level 9-10: 5+ words, longer constructions
+const LEVELS = [
+// ── LEVEL 1 ── Ultra basics, 1-2 words
+[
+{cat:‘greetings’,en:‘Hello!’,id:[‘Halo’],hint:’“Halo” — same as English, easy!’},
+{cat:‘greetings’,en:‘Thank you.’,id:[‘Terima’,‘kasih’],hint:’“Terima” = receive, “kasih” = love. Together: thank you.’},
+{cat:‘greetings’,en:‘Sorry / Excuse me.’,id:[‘Permisi’],hint:‘Use for “excuse me” or to get someone's attention.’},
+{cat:‘greetings’,en:‘Good morning.’,id:[‘Selamat’,‘pagi’],hint:’“Selamat” = safe/happy, “pagi” = morning.’},
+{cat:‘food’,en:‘Delicious!’,id:[‘Enak’],hint:’“Enak” = yummy/delicious. One of the best words to know!’},
+{cat:‘food’,en:‘Spicy!’,id:[‘Pedas’],hint:’“Pedas” = spicy. Say it while pointing at food!’},
+{cat:‘directions’,en:‘Left.’,id:[‘Kiri’],hint:’“Kiri” = left. Think of it as the quirky direction.’},
+{cat:‘directions’,en:‘Right.’,id:[‘Kanan’],hint:’“Kanan” = right.’},
+{cat:‘shopping’,en:‘Expensive!’,id:[‘Mahal’],hint:’“Mahal” = expensive. Useful for bargaining!’},
+{cat:‘shopping’,en:‘Cheap!’,id:[‘Murah’],hint:’“Murah” = cheap. The word you want to hear!’},
+],
+// ── LEVEL 2 ── Core 2-word phrases
+[
+{cat:‘greetings’,en:‘How are you?’,id:[‘Apa’,‘kabar’],hint:‘Literally “what news?”’},
+{cat:‘greetings’,en:“You’re welcome.”,id:[‘Sama’,‘sama’],hint:‘Literally “same same” — like in Thai!’},
+{cat:‘greetings’,en:‘I'm sorry.’,id:[‘Maaf’],hint:’“Maaf” = sorry/forgive me.’},
+{cat:‘food’,en:‘Not spicy.’,id:[‘Jangan’,‘pedas’],hint:’“Jangan” = don't. “Pedas” = spicy.’},
+{cat:‘food’,en:‘This one.’,id:[‘Ini’],hint:’“Ini” = this. Point and say it!’},
+{cat:‘food’,en:‘That one.’,id:[‘Itu’],hint:’“Itu” = that. For things further away.’},
+{cat:‘directions’,en:‘Turn left.’,id:[‘Belok’,‘kiri’],hint:’“Belok” = turn.’},
+{cat:‘directions’,en:‘Turn right.’,id:[‘Belok’,‘kanan’],hint:’“Belok” = turn. “Kanan” = right.’},
+{cat:‘shopping’,en:‘How much?’,id:[‘Berapa’],hint:’“Berapa” = how much. Say this for any price!’},
+{cat:‘shopping’,en:‘Can you discount?’,id:[‘Bisa’,‘kurang’],hint:’“Bisa” = can. “Kurang” = less.’},
+],
+// ── LEVEL 3 ── I want / I need
+[
+{cat:‘want’,en:‘I want.’,id:[‘Saya’,‘mau’],hint:’“Saya” = I. “Mau” = want. Your most useful combo!’},
+{cat:‘want’,en:‘I want this.’,id:[‘Saya’,‘mau’,‘ini’],hint:‘Point at anything and say this!’},
+{cat:‘want’,en:‘I don't want it.’,id:[‘Saya’,‘tidak’,‘mau’],hint:’“Tidak” = not/no.’},
+{cat:‘food’,en:‘I want to eat.’,id:[‘Saya’,‘mau’,‘makan’],hint:’“Makan” = eat.’},
+{cat:‘food’,en:‘I want to drink.’,id:[‘Saya’,‘mau’,‘minum’],hint:’“Minum” = drink.’},
+{cat:‘food’,en:‘One more.’,id:[‘Satu’,‘lagi’],hint:’“Satu” = one. “Lagi” = more/again.’},
+{cat:‘food’,en:‘Cold water.’,id:[‘Air’,‘dingin’],hint:’“Air” = water (say “eye-er”). “Dingin” = cold.’},
+{cat:‘food’,en:‘Hot water.’,id:[‘Air’,‘panas’],hint:’“Panas” = hot.’},
+{cat:‘food’,en:‘The bill please.’,id:[‘Minta’,‘bon’],hint:’“Minta” = ask for. “Bon” = bill.’},
+{cat:‘food’,en:‘This is delicious!’,id:[‘Ini’,‘enak’],hint:’“Ini” = this. “Enak” = delicious.’},
+],
+// ── LEVEL 4 ── Where is + basic locations
+[
+{cat:‘directions’,en:‘Where is it?’,id:[‘Di’,‘mana’],hint:’“Di mana” = where is. Super useful opener!’},
+{cat:‘directions’,en:‘Where is the toilet?’,id:[‘Di’,‘mana’,‘toilet’],hint:‘Put location after “di mana”.’},
+{cat:‘directions’,en:‘Where is the hotel?’,id:[‘Di’,‘mana’,‘hotel’],hint:‘Many English words work in Bahasa!’},
+{cat:‘directions’,en:‘Where is the restaurant?’,id:[‘Di’,‘mana’,‘restoran’],hint:’“Restoran” = restaurant.’},
+{cat:‘directions’,en:‘Where is the market?’,id:[‘Di’,‘mana’,‘pasar’],hint:’“Pasar” = market/bazaar.’},
+{cat:‘directions’,en:‘Where is the beach?’,id:[‘Di’,‘mana’,‘pantai’],hint:’“Pantai” = beach.’},
+{cat:‘directions’,en:‘Where is the airport?’,id:[‘Di’,‘mana’,‘bandara’],hint:’“Bandara” = airport.’},
+{cat:‘directions’,en:‘Go straight.’,id:[‘Jalan’,‘terus’],hint:’“Jalan” = road/walk. “Terus” = continue.’},
+{cat:‘directions’,en:‘Near here.’,id:[‘Dekat’,‘sini’],hint:’“Dekat” = near. “Sini” = here.’},
+{cat:‘directions’,en:‘Stop here.’,id:[‘Berhenti’,‘di’,‘sini’],hint:’“Berhenti” = stop. Essential for taxis!’},
+],
+// ── LEVEL 5 ── My name / introductions + food orders
+[
+{cat:‘greetings’,en:‘My name is…’,id:[‘Nama’,‘saya’],hint:’“Nama” = name. Say this then your name.’},
+{cat:‘greetings’,en:‘I don't understand.’,id:[‘Saya’,‘tidak’,‘mengerti’],hint:’“Mengerti” = understand.’},
+{cat:‘greetings’,en:‘Can you speak slowly?’,id:[‘Bisa’,‘bicara’,‘pelan’,‘pelan’],hint:’“Pelan-pelan” = slowly. Repeat = gentler.’},
+{cat:‘greetings’,en:‘Thank you very much.’,id:[‘Terima’,‘kasih’,‘banyak’],hint:’“Banyak” = a lot. Adds warmth!’},
+{cat:‘food’,en:‘I don't eat meat.’,id:[‘Saya’,‘tidak’,‘makan’,‘daging’],hint:’“Daging” = meat.’},
+{cat:‘food’,en:‘What is this?’,id:[‘Ini’,‘apa’],hint:‘Flip: “apa ini” also works!’},
+{cat:‘food’,en:‘Not sweet.’,id:[‘Jangan’,‘manis’],hint:’“Manis” = sweet.’},
+{cat:‘food’,en:‘Not salty.’,id:[‘Jangan’,‘asin’],hint:’“Asin” = salty.’},
+{cat:‘shopping’,en:‘How much is this?’,id:[‘Berapa’,‘harga’,‘ini’],hint:’“Harga” = price.’},
+{cat:‘shopping’,en:‘Too expensive.’,id:[‘Terlalu’,‘mahal’],hint:’“Terlalu” = too much.’},
+],
+// ── LEVEL 6 ── I want to go + transport
+[
+{cat:‘want’,en:‘I want to go to the beach.’,id:[‘Saya’,‘mau’,‘ke’,‘pantai’],hint:’“Ke” = to (direction).’},
+{cat:‘want’,en:‘I want to go to the market.’,id:[‘Saya’,‘mau’,‘ke’,‘pasar’],hint:’“Pasar” = market.’},
+{cat:‘want’,en:‘I want to go home.’,id:[‘Saya’,‘mau’,‘pulang’],hint:’“Pulang” = go home/return.’},
+{cat:‘want’,en:‘I want to go to the hotel.’,id:[‘Saya’,‘mau’,‘ke’,‘hotel’],hint:’“Ke” = to. Easy loan word!’},
+{cat:‘want’,en:‘I want to sleep.’,id:[‘Saya’,‘mau’,‘tidur’],hint:’“Tidur” = sleep.’},
+{cat:‘want’,en:‘I need help.’,id:[‘Saya’,‘butuh’,‘bantuan’],hint:’“Butuh” = need. “Bantuan” = help.’},
+{cat:‘directions’,en:‘How far is it?’,id:[‘Berapa’,‘jauh’],hint:’“Jauh” = far.’},
+{cat:‘directions’,en:‘Is it far from here?’,id:[‘Jauh’,‘dari’,‘sini’],hint:’“Dari” = from.’},
+{cat:‘shopping’,en:‘I'll take it.’,id:[‘Saya’,‘ambil’,‘ini’],hint:’“Ambil” = take.’},
+{cat:‘shopping’,en:‘Do you have a bag?’,id:[‘Ada’,‘tas’],hint:’“Ada” = have/exist.’},
+],
+// ── LEVEL 7 ── Hotel + accommodation
+[
+{cat:‘greetings’,en:‘I have a booking.’,id:[‘Saya’,‘sudah’,‘pesan’],hint:’“Sudah” = already. “Pesan” = book/order.’},
+{cat:‘greetings’,en:‘I need a room.’,id:[‘Saya’,‘butuh’,‘kamar’],hint:’“Kamar” = room.’},
+{cat:‘greetings’,en:‘Where is the key?’,id:[‘Di’,‘mana’,‘kunci’],hint:’“Kunci” = key.’},
+{cat:‘greetings’,en:‘I want a towel.’,id:[‘Saya’,‘mau’,‘handuk’],hint:’“Handuk” = towel.’},
+{cat:‘greetings’,en:‘I want a blanket.’,id:[‘Saya’,‘mau’,‘selimut’],hint:’“Selimut” = blanket.’},
+{cat:‘food’,en:‘I want to order.’,id:[‘Saya’,‘mau’,‘pesan’],hint:’“Pesan” = to order.’},
+{cat:‘food’,en:‘Without meat please.’,id:[‘Tanpa’,‘daging’],hint:’“Tanpa” = without. Very useful!’},
+{cat:‘food’,en:‘Can I pay now?’,id:[‘Bisa’,‘bayar’,‘sekarang’],hint:’“Bayar” = pay. “Sekarang” = now.’},
+{cat:‘shopping’,en:‘Do you have change?’,id:[‘Ada’,‘kembalian’],hint:’“Kembalian” = change (money).’},
+{cat:‘shopping’,en:‘I want to pay.’,id:[‘Saya’,‘mau’,‘bayar’],hint:’“Bayar” = pay.’},
+],
+// ── LEVEL 8 ── Health + emergency basics
+[
+{cat:‘greetings’,en:‘I am sick.’,id:[‘Saya’,‘sakit’],hint:’“Sakit” = sick/pain. Also used for “it hurts”.’},
+{cat:‘greetings’,en:‘I have a fever.’,id:[‘Saya’,‘demam’],hint:’“Demam” = fever.’},
+{cat:‘greetings’,en:‘I need medicine.’,id:[‘Saya’,‘butuh’,‘obat’],hint:’“Obat” = medicine.’},
+{cat:‘greetings’,en:‘Where is the doctor?’,id:[‘Di’,‘mana’,‘dokter’],hint:’“Dokter” = doctor.’},
+{cat:‘greetings’,en:‘Where is the hospital?’,id:[‘Di’,‘mana’,‘rumah’,‘sakit’],hint:’“Rumah sakit” = house of sick = hospital!’},
+{cat:‘greetings’,en:‘Call the police!’,id:[‘Tolong’,‘panggil’,‘polisi’],hint:’“Tolong” = please/help. “Panggil” = call.’},
+{cat:‘greetings’,en:‘Call an ambulance!’,id:[‘Tolong’,‘panggil’,‘ambulans’],hint:’“Ambulans” = ambulance.’},
+{cat:‘greetings’,en:‘Help me please!’,id:[‘Tolong’,‘bantu’,‘saya’],hint:’“Bantu” = help (verb). “Tolong” = please.’},
+{cat:‘greetings’,en:‘It hurts here.’,id:[‘Sakit’,‘di’,‘sini’],hint:‘Point to where it hurts as you say it.’},
+{cat:‘greetings’,en:‘I lost my bag.’,id:[‘Tas’,‘saya’,‘hilang’],hint:’“Hilang” = lost/gone.’},
+],
+// ── LEVEL 9 ── Time + day phrases
+[
+{cat:‘greetings’,en:‘What time is it?’,id:[‘Jam’,‘berapa’,‘sekarang’],hint:’“Jam” = hour/clock. “Sekarang” = now.’},
+{cat:‘greetings’,en:‘I'll be there soon.’,id:[‘Saya’,‘datang’,‘sebentar’,‘lagi’],hint:’“Datang” = come. “Sebentar” = a moment.’},
+{cat:‘greetings’,en:‘Please wait a moment.’,id:[‘Tolong’,‘tunggu’,‘sebentar’],hint:’“Tunggu” = wait.’},
+{cat:‘want’,en:‘I want to go tomorrow.’,id:[‘Saya’,‘mau’,‘pergi’,‘besok’],hint:’“Pergi” = go. “Besok” = tomorrow.’},
+{cat:‘want’,en:‘I want to come later.’,id:[‘Saya’,‘mau’,‘datang’,‘nanti’],hint:’“Nanti” = later.’},
+{cat:‘food’,en:‘Is the restaurant open?’,id:[‘Restoran’,‘buka’,‘atau’,‘tutup’],hint:’“Buka” = open. “Tutup” = closed. “Atau” = or.’},
+{cat:‘food’,en:‘The restaurant is full.’,id:[‘Restoran’,‘penuh’],hint:’“Penuh” = full.’},
+{cat:‘directions’,en:‘How many minutes?’,id:[‘Berapa’,‘menit’],hint:’“Menit” = minute.’},
+{cat:‘shopping’,en:‘Can I pay with card?’,id:[‘Bisa’,‘bayar’,‘dengan’,‘kartu’],hint:’“Dengan” = with. “Kartu” = card.’},
+{cat:‘shopping’,en:‘Do you have a smaller size?’,id:[‘Ada’,‘ukuran’,‘lebih’,‘kecil’],hint:’“Ukuran” = size. “Lebih kecil” = smaller.’},
+],
+// ── LEVEL 10 ── Full tourist sentences
+[
+{cat:‘want’,en:‘I want to go to the airport tomorrow.’,id:[‘Saya’,‘mau’,‘ke’,‘bandara’,‘besok’],hint:’“Bandara” = airport. “Besok” = tomorrow.’},
+{cat:‘directions’,en:‘Can you show me on the map?’,id:[‘Bisa’,‘tunjuk’,‘di’,‘peta’],hint:’“Tunjuk” = show/point. “Peta” = map.’},
+{cat:‘food’,en:‘Table for two please.’,id:[‘Meja’,‘untuk’,‘dua’,‘orang’],hint:’“Meja” = table. “Orang” = person.’},
+{cat:‘food’,en:‘Do you have a vegetarian menu?’,id:[‘Ada’,‘menu’,‘vegetarian’],hint:’“Menu” = menu. Loanword!’},
+{cat:‘food’,en:‘I'm allergic to peanuts.’,id:[‘Saya’,‘alergi’,‘kacang’],hint:’“Alergi” = allergic. “Kacang” = peanuts.’},
+{cat:‘shopping’,en:‘Can I try it on?’,id:[‘Boleh’,‘coba’,‘dulu’],hint:’“Boleh” = may/allowed. “Coba” = try. “Dulu” = first.’},
+{cat:‘shopping’,en:‘I'm just looking.’,id:[‘Saya’,‘hanya’,‘melihat’],hint:’“Hanya” = just/only. “Melihat” = looking.’},
+{cat:‘greetings’,en:‘Nice to meet you.’,id:[‘Senang’,‘bertemu’,‘dengan’,‘kamu’],hint:’“Senang” = happy. “Bertemu” = to meet.’},
+{cat:‘want’,en:‘I want to take a photo here.’,id:[‘Saya’,‘mau’,‘foto’,‘di’,‘sini’],hint:’“Foto” = photo. Great for tourist spots!’},
+{cat:‘want’,en:‘Can you recommend a restaurant?’,id:[‘Bisa’,‘rekomendasikan’,‘restoran’],hint:’“Rekomendasikan” = recommend. Loanword!’},
+],
+];
+
+const TIPS=[
+‘Indonesians love when tourists try — any effort gets big smiles.’,
+‘“Mau” (want) + anything is your most powerful phrase.’,
+‘Numbers: satu(1) dua(2) tiga(3) empat(4) lima(5) enam(6) tujuh(7) delapan(8) sembilan(9) sepuluh(10).’,
+‘“Bisa” (can) unlocks everything — “Bisa foto?” = Can I take a photo?’,
+‘“Berapa?” for every price. Then reply with “Terlalu mahal!” to negotiate.’,
+‘“Ada” (have/exist) works as a question: “Ada wifi?” “Ada menu bahasa Inggris?”’,
+‘Indonesian has no verb tenses — context tells you when. “Saya makan” = I eat/I ate/I'm eating.’,
+‘Repeating a word softens or pluralises it: “pelan-pelan” = slowly, “anak-anak” = children.’,
+‘Add “ya?” at the end to turn any statement into a question.’,
+‘“Tolong” (please/help) before any request makes it polite immediately.’,
+];
+
+// ── STATE ─────────────────────────────────────────────────────────
+let diff=‘noob’;
+let currentLevel=0;       // 0-indexed
+let maxUnlocked=0;        // highest unlocked level index
+let levelOrder=[];        // shuffled sentence indices for current level
+let levelIdx=0;           // position within current level’s order
+let solvedInLevel=new Set(); // sentence indices solved at least once this level run
+let correctN=0, wrongN=0;
+let placed=[], checked=false, easyBlankIdx=0, easySelected=’’;
+
+// ── INIT ──────────────────────────────────────────────────────────
+function setDifficulty(d){
+diff=d;
+[‘noob’,‘easy’,‘hard’].forEach(x=>{
+document.getElementById(‘diff-’+x).className=‘diff-btn’+(x===d?’ active-’+x:’’);
+});
+if(levelOrder.length>0) loadSentence(); else startLevel(0);
+}
+
+function startLevel(lvlIdx){
+currentLevel=lvlIdx;
+levelOrder=shuffle(LEVELS[lvlIdx].map((_,i)=>i));
+levelIdx=0;
+solvedInLevel=new Set();
+correctN=0; wrongN=0;
+document.getElementById(‘correct-count’).textContent=0;
+document.getElementById(‘wrong-count’).textContent=0;
+document.getElementById(‘level-complete’).style.display=‘none’;
+document.getElementById(‘unlock-banner’).classList.remove(‘show’);
+document.getElementById(‘main-card’).style.display=‘block’;
+renderLevelDots();
+updateLevelLabel();
+loadSentence();
+}
+
+function shuffle(a){return[…a].sort(()=>Math.random()-0.5);}
+
+// ── LEVEL DOTS ─────────────────────────────────────────────────────
+function renderLevelDots(){
+const container=document.getElementById(‘level-dots’);
+container.innerHTML=’’;
+for(let i=0;i<10;i++){
+const btn=document.createElement(‘button’);
+btn.className=‘level-dot’;
+const solved=getLevelSolvedCount(i);
+const isComplete=solved>=10;
+if(i>maxUnlocked){
+btn.classList.add(‘locked’);
+btn.innerHTML=`<span class="dot-num">${i+1}</span><span class="dot-icon">🔒</span>`;
+btn.disabled=true;
+} else if(i===currentLevel){
+btn.classList.add(‘active-level’);
+btn.innerHTML=`<span class="dot-num">${i+1}</span><span class="dot-icon">▶</span>`;
+btn.onclick=()=>startLevel(i);
+} else if(isComplete){
+btn.classList.add(‘complete’);
+btn.innerHTML=`<span class="dot-num">${i+1}</span><span class="dot-icon">✓</span>`;
+btn.onclick=()=>startLevel(i);
+} else {
+btn.classList.add(‘unlocked’);
+btn.innerHTML=`<span class="dot-num">${i+1}</span><span class="dot-icon">○</span>`;
+btn.onclick=()=>startLevel(i);
+}
+container.appendChild(btn);
+}
+}
+
+// Track per-level completion across sessions (in-memory)
+const levelSolved=Array(10).fill(null).map(()=>new Set());
+
+function getLevelSolvedCount(lvl){return levelSolved[lvl].size;}
+
+function updateLevelLabel(){
+document.getElementById(‘current-level-label’).textContent=currentLevel+1;
+document.getElementById(‘level-progress-label’).textContent=
+`${solvedInLevel.size}/10 solved`;
+}
+
+// ── LOAD SENTENCE ─────────────────────────────────────────────────
+function loadSentence(){
+const s=sentences();
+placed=[]; checked=false; easySelected=’’;
+
+document.getElementById(‘cat-tag’).textContent={
+greetings:‘👋 Greetings’,directions:‘📍 Directions’,
+food:‘🍜 Food & Drink’,want:‘🙏 Wants’,shopping:‘🛍️ Shopping’
+}[s.cat];
+
+const badge=document.getElementById(‘diff-badge’);
+badge.textContent=diff; badge.className=‘diff-badge ‘+diff;
+document.getElementById(‘english-sentence’).textContent=s.en;
+document.getElementById(‘feedback’).className=‘feedback’;
+document.getElementById(‘feedback’).innerHTML=’’;
+document.getElementById(‘next-actions’).style.display=‘none’;
+document.getElementById(‘main-actions’).style.display=‘flex’;
+document.getElementById(‘unlock-banner’).classList.remove(‘show’);
+
+[‘noob-preview’,‘easy-display’,‘easy-options’,‘build-area’,‘word-bank’].forEach(id=>{
+document.getElementById(id).style.display=‘none’;
+});
+
+if(diff===‘noob’) loadNoob(s);
+else if(diff===‘easy’) loadEasy(s);
+else loadHard(s);
+
+updateProgress();
+updateLevelLabel();
+}
+
+function sentences(){return LEVELS[currentLevel][levelOrder[levelIdx]];}
+
+// ── NOOB ──────────────────────────────────────────────────────────
+function loadNoob(s){
+const preview=document.getElementById(‘noob-preview’);
+preview.style.display=‘flex’;
+preview.innerHTML=s.id.map(w=>{
+const t=tr(w);
+return`<div class="noob-word-block"><span class="noob-word">${w}</span>${t?`<span class="noob-trans">${t}</span>`:''}</div>`;
+}).join(’’);
+showBuildArea(s,true);
+}
+
+// ── EASY ──────────────────────────────────────────────────────────
+function loadEasy(s){
+easyBlankIdx=s.id.length>1?(Math.floor(Math.random()*(s.id.length-1))+1):0;
+if(s.id.length===2)easyBlankIdx=1;
+const display=document.getElementById(‘easy-display’);
+display.style.display=‘flex’; display.style.borderColor=’’; display.style.background=’’;
+display.innerHTML=s.id.map((w,i)=>
+i===easyBlankIdx?`<span class="easy-blank" id="easy-blank">?</span>`
+:`<span class="easy-fixed">${w}</span>`
+).join(’’);
+const correct=s.id[easyBlankIdx];
+const distractors=shuffle(getAllWords().filter(w=>w!==correct)).slice(0,3);
+const opts=shuffle([correct,…distractors]);
+const optEl=document.getElementById(‘easy-options’);
+optEl.style.display=‘flex’;
+optEl.innerHTML=opts.map(w=>{
+const t=tr(w);
+return`<button class="easy-opt" data-word="${w}" onclick="selectEasyOpt('${w}',this)"><span>${w}</span>${t?`<span class="opt-trans">${t}</span>`:''}</button>`;
+}).join(’’);
+document.getElementById(‘btn-clear’).style.visibility=‘hidden’;
+}
+
+function selectEasyOpt(word,btn){
+if(checked)return;
+document.querySelectorAll(’.easy-opt’).forEach(b=>b.classList.remove(‘selected’));
+btn.classList.add(‘selected’); easySelected=word;
+const blank=document.getElementById(‘easy-blank’);
+blank.textContent=word; blank.className=‘easy-blank filled’;
+}
+
+// ── HARD ──────────────────────────────────────────────────────────
+function loadHard(s){
+showBuildArea(s,false);
+}
+
+function showBuildArea(s,showTr){
+const ba=document.getElementById(‘build-area’);
+ba.style.display=‘flex’; ba.className=‘build-area’;
+ba.innerHTML=’<span class="build-placeholder">Tap words below to build the sentence →</span>’;
+document.getElementById(‘word-bank’).style.display=‘flex’;
+document.getElementById(‘btn-clear’).style.visibility=‘visible’;
+buildBank(s,showTr);
+}
+
+function getAllWords(){return LEVELS.flatMap(lvl=>lvl.flatMap(s=>s.id));}
+
+function buildBank(s,showTr){
+const distractors=shuffle(getAllWords().filter(w=>!s.id.includes(w))).slice(0,Math.min(3,s.id.length));
+const words=shuffle([…s.id,…distractors]);
+const wb=document.getElementById(‘word-bank’);
+wb.innerHTML=’’;
+words.forEach((w,i)=>{
+const btn=document.createElement(‘button’);
+btn.className=‘word-chip’; btn.dataset.index=i;
+const t=tr(w);
+btn.innerHTML=`<span>${w}</span>${showTr&&t?`<span class="chip-trans">${t}</span>`:''}`;
+btn.onclick=()=>tapWord(w,i,btn,showTr);
+wb.appendChild(btn);
+});
+}
+
+// ── TAP / PLACE ────────────────────────────────────────────────────
+function tapWord(word,index,btn,showTr){
+if(checked||btn.classList.contains(‘used’))return;
+btn.classList.add(‘used’);
+placed.push({word,chipIndex:index});
+renderBuild(showTr!==undefined?showTr:diff===‘noob’);
+}
+
+function renderBuild(showTr){
+const st=showTr!==undefined?showTr:(diff===‘noob’);
+const area=document.getElementById(‘build-area’);
+if(placed.length===0){
+area.className=‘build-area’;
+area.innerHTML=’<span class="build-placeholder">Tap words below to build the sentence →</span>’;
+return;
+}
+area.className=‘build-area has-words’; area.innerHTML=’’;
+placed.forEach((item,i)=>{
+const span=document.createElement(‘span’);
+span.className=‘placed-word’;
+const t=tr(item.word);
+span.innerHTML=`<span>${item.word}</span>${st&&t?`<span class="ptrans">${t}</span>`:''}`;
+span.onclick=()=>removePlaced(i,st);
+area.appendChild(span);
+});
+}
+
+function removePlaced(i,showTr){
+if(checked)return;
+const removed=placed.splice(i,1)[0];
+document.querySelectorAll(’.word-chip’).forEach(b=>{
+if(parseInt(b.dataset.index)===removed.chipIndex)b.classList.remove(‘used’);
+});
+renderBuild(showTr);
+}
+
+function clearAnswer(){
+if(checked)return;
+placed=[];
+document.querySelectorAll(’.word-chip’).forEach(b=>b.classList.remove(‘used’));
+renderBuild();
+document.getElementById(‘feedback’).className=‘feedback’;
+}
+
+// ── CHECK ──────────────────────────────────────────────────────────
+function checkAnswer(){
+const s=sentences();
+const fb=document.getElementById(‘feedback’);
+if(diff===‘easy’){
+if(!easySelected){fb.className=‘feedback hint’;fb.textContent=‘💡 Tap a word to fill the blank first!’;return;}
+checked=true;
+const correct=s.id[easyBlankIdx];
+const blank=document.getElementById(‘easy-blank’);
+const display=document.getElementById(‘easy-display’);
+if(easySelected===correct){
+blank.className=‘easy-blank correct-b’;
+display.style.borderColor=‘var(–correct)’; display.style.background=‘rgba(45,138,78,0.06)’;
+fb.className=‘feedback correct’;
+fb.innerHTML=`✅ <strong>Betul!</strong> "${s.id.join(' ')}" — perfect!`;
+markSolved(); correctN++; document.getElementById(‘correct-count’).textContent=correctN;
+} else {
+blank.className=‘easy-blank wrong-b’;
+display.style.borderColor=‘var(–wrong)’; display.style.background=‘rgba(196,48,48,0.04)’;
+fb.className=‘feedback wrong’;
+fb.innerHTML=`❌ The missing word was: <strong>${correct}</strong> — "${s.id.join(' ')}"`;
+wrongN++; document.getElementById(‘wrong-count’).textContent=wrongN;
+}
+document.querySelectorAll(’.easy-opt’).forEach(b=>{
+if(b.dataset.word===correct){b.style.borderColor=‘var(–correct)’;b.style.color=‘var(–correct)’;}
+else b.classList.add(‘used-opt’);
+});
+} else {
+if(placed.length===0){fb.className=‘feedback hint’;fb.textContent=‘💡 Tap the words below to build the sentence first!’;return;}
+checked=true;
+const attempt=placed.map(p=>p.word).join(’ ‘);
+const correct=s.id.join(’ ’);
+const ba=document.getElementById(‘build-area’);
+if(attempt===correct){
+ba.classList.add(‘correct’);
+fb.className=‘feedback correct’;
+fb.innerHTML=`✅ <strong>Betul!</strong> "${correct}" — well done!`;
+markSolved(); correctN++; document.getElementById(‘correct-count’).textContent=correctN;
+} else {
+ba.classList.add(‘wrong’);
+fb.className=‘feedback wrong’;
+fb.innerHTML=`❌ Not quite. The answer is: <strong>${correct}</strong>`;
+wrongN++; document.getElementById(‘wrong-count’).textContent=wrongN;
+}
+}
+document.getElementById(‘main-actions’).style.display=‘none’;
+document.getElementById(‘next-actions’).style.display=‘flex’;
+updateProgress();
+updateLevelLabel();
+}
+
+function markSolved(){
+const sentIdx=levelOrder[levelIdx];
+solvedInLevel.add(sentIdx);
+levelSolved[currentLevel].add(sentIdx);
+}
+
+function showHint(){
+if(checked)return;
+const s=sentences();
+const fb=document.getElementById(‘feedback’);
+fb.className=‘feedback hint’;
+if(diff===‘easy’){
+const missing=s.id[easyBlankIdx];
+const t=tr(missing);
+fb.innerHTML=`💡 <strong>Hint:</strong> The missing word means "${t||'?'}"`;
+} else {
+fb.innerHTML=`💡 <strong>Hint:</strong> ${s.hint} (${s.id.length} word${s.id.length>1?'s':''})`;
+}
+}
+
+// ── NEXT ──────────────────────────────────────────────────────────
+function nextSentence(){
+document.getElementById(‘unlock-banner’).classList.remove(‘show’);
+
+// Check if all 10 sentences solved at least once
+if(solvedInLevel.size>=10){
+showLevelComplete();
+return;
+}
+
+// Advance to next sentence; if we’ve exhausted the shuffled order, reshuffle unsolved
+levelIdx++;
+if(levelIdx>=levelOrder.length){
+// Reshuffle only unsolved sentences to fill gaps
+const unsolved=LEVELS[currentLevel].map((_,i)=>i).filter(i=>!solvedInLevel.has(i));
+if(unsolved.length>0){
+levelOrder=[…levelOrder,…shuffle(unsolved)];
+} else {
+showLevelComplete(); return;
+}
+}
+loadSentence();
+}
+
+// ── LEVEL COMPLETE ─────────────────────────────────────────────────
+function showLevelComplete(){
+document.getElementById(‘main-card’).style.display=‘none’;
+const lc=document.getElementById(‘level-complete’);
+lc.style.display=‘block’;
+document.getElementById(‘lc-title’).textContent=`Level ${currentLevel+1} Complete!`;
+document.getElementById(‘lc-sub’).textContent=`You solved all 10 phrases on level ${currentLevel+1}. Bagus sekali!`;
+document.getElementById(‘tip-text’).textContent=TIPS[currentLevel];
+
+const isLastLevel=currentLevel>=9;
+const advBtn=document.getElementById(‘btn-advance’);
+
+if(!isLastLevel){
+// Unlock next level
+const nextLvl=currentLevel+1;
+if(nextLvl>maxUnlocked){
+maxUnlocked=nextLvl;
+// Show unlock banner briefly
+const banner=document.getElementById(‘unlock-banner’);
+document.getElementById(‘unlock-title’).textContent=`Level ${nextLvl+1} Unlocked!`;
+document.getElementById(‘unlock-sub’).textContent=`10 new phrases ready. Keep going!`;
+banner.classList.add(‘show’);
+}
+advBtn.textContent=‘Next level →’;
+advBtn.disabled=false;
+} else {
+advBtn.textContent=‘🎉 All done!’;
+advBtn.disabled=true;
+document.getElementById(‘lc-sub’).textContent=‘You've completed all 100 phrases. Luar biasa!’;
+}
+
+renderLevelDots();
+}
+
+function goNextLevel(){
+if(currentLevel<9)startLevel(currentLevel+1);
+}
+
+function replayLevel(){
+document.getElementById(‘level-complete’).style.display=‘none’;
+startLevel(currentLevel);
+}
+
+// ── PROGRESS ──────────────────────────────────────────────────────
+function updateProgress(){
+const pct=(solvedInLevel.size/10)*100;
+document.getElementById(‘progress-fill’).style.width=pct+’%’;
+document.getElementById(‘sentence-counter’).textContent=`${solvedInLevel.size}/10 solved`;
+}
+
+// ── BOOT ──────────────────────────────────────────────────────────
+setDifficulty(‘noob’);
+</script>
+
+</body>
+</html>
