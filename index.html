@@ -198,8 +198,7 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
 .vocab-search:focus{border-color:var(--jungle);}
 
 /* DIRECTION TOGGLE */
-.direction-toggle{display:flex;justify-content:center;margin:4px 0 12px;}
-.dir-btn{background:white;border:1.5px solid var(--warm);border-radius:20px;padding:5px 20px;font-size:0.8rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;letter-spacing:0.03em;}
+.dir-btn{background:white;border:1.5px solid var(--warm);border-radius:20px;padding:3px 10px;font-size:0.68rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;letter-spacing:0.03em;white-space:nowrap;}
 .dir-btn:hover{border-color:var(--jungle);color:var(--jungle);}
 .dir-btn.reverse{background:var(--jungle);border-color:var(--jungle);color:white;}
 .dir-btn.reverse:hover{background:var(--jungle-light);border-color:var(--jungle-light);}
@@ -230,11 +229,6 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
     <button class="diff-btn" id="diff-hard" onclick="setDifficulty('hard')">
       <span class="diff-icon">🔥</span><span>Hard</span><span class="diff-sub">whole sentence</span>
     </button>
-  </div>
-
-  <!-- DIRECTION TOGGLE -->
-  <div class="direction-toggle">
-    <button class="dir-btn" id="dir-toggle" onclick="toggleDirection()">EN → ID</button>
   </div>
 
   <!-- LEVEL SELECTOR -->
@@ -273,6 +267,7 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
     <div class="card-top">
       <span class="category-tag" id="cat-tag">—</span>
       <span class="diff-badge noob" id="diff-badge">noob</span>
+      <button class="dir-btn" id="dir-toggle" onclick="toggleDirection()" style="margin-left:auto">EN → ID</button>
     </div>
     <div class="english-sentence" id="english-sentence">Loading…</div>
 
@@ -840,7 +835,7 @@ const display=document.getElementById('easy-display');
 display.style.display='flex'; display.style.borderColor=''; display.style.background='';
 display.innerHTML=s.id.map((w,i)=>
 i===easyBlankIdx?`<span class="easy-blank" id="easy-blank">?</span>`
-:`<span class="easy-fixed">${w}</span>`
+:`<span class="easy-fixed">${tr(w)||w}</span>`
 ).join('');
 const correctEn=chosen.t;
 const allTrVals=[...new Set(Object.values(TR))].filter(v=>v!==correctEn);
