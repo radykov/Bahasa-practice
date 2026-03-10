@@ -164,6 +164,35 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
 .btn-advance{background:var(--terracotta);color:white;flex:1;}
 .btn-advance:hover{background:var(--terracotta-dark);}
 .btn-advance:disabled{background:var(--muted);cursor:not-allowed;}
+
+/* VOCAB BUTTON */
+.vocab-btn{background:white;border:1.5px solid var(--warm);color:var(--muted);padding:5px 11px;border-radius:9px;font-size:0.76rem;font-weight:500;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+.vocab-btn:hover{border-color:var(--jungle);color:var(--jungle);}
+
+/* VOCAB MODAL */
+.vocab-overlay{position:fixed;inset:0;background:rgba(28,28,28,0.55);z-index:100;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn 0.2s ease;}
+.vocab-panel{background:var(--sand);border-radius:24px 24px 0 0;width:100%;max-width:640px;max-height:82vh;display:flex;flex-direction:column;box-shadow:0 -8px 40px rgba(28,28,28,0.18);animation:slideUp 0.28s ease;}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.vocab-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 12px;border-bottom:1.5px solid var(--warm);}
+.vocab-header h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--ink);}
+.vocab-close{background:var(--warm);border:none;width:30px;height:30px;border-radius:50%;font-size:0.9rem;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.vocab-close:hover{background:var(--terracotta);color:white;}
+.vocab-tabs{display:flex;gap:6px;padding:12px 20px 0;}
+.vtab{flex:1;padding:7px 12px;border-radius:9px;border:1.5px solid var(--warm);font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;background:white;color:var(--muted);transition:all 0.15s;}
+.vtab.active{background:var(--jungle);color:white;border-color:var(--jungle);}
+.vocab-controls{display:flex;align-items:center;gap:8px;padding:10px 20px;}
+.vocab-count{font-size:0.75rem;color:var(--muted);flex:1;}
+.vocab-star-filter-btn{background:white;border:1.5px solid var(--warm);color:var(--muted);padding:5px 11px;border-radius:9px;font-size:0.76rem;font-weight:500;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+.vocab-star-filter-btn.active{background:rgba(255,193,7,0.15);border-color:#F5A623;color:#C47B00;}
+.vocab-word-list{overflow-y:auto;padding:4px 20px 24px;flex:1;}
+.vocab-row{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid rgba(232,213,176,0.6);}
+.vocab-row:last-child{border-bottom:none;}
+.vocab-word-info{flex:1;display:flex;align-items:baseline;gap:10px;}
+.vocab-word{font-size:0.96rem;font-weight:600;color:var(--ink);}
+.vocab-trans{font-size:0.78rem;color:var(--muted);font-style:italic;}
+.vocab-star-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px 6px;border-radius:8px;transition:all 0.15s;line-height:1;}
+.vocab-star-btn:hover{background:rgba(255,193,7,0.15);transform:scale(1.15);}
+.vocab-empty{text-align:center;color:var(--muted);font-size:0.88rem;padding:32px 0;line-height:1.6;}
 </style>
 
 </head>
@@ -198,6 +227,7 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
   <div class="level-bar-wrap">
     <div class="level-bar-label">
       <span>Level <strong id="current-level-label">1</strong> of 10</span>
+      <button class="vocab-btn" onclick="openVocabModal()">📖 Words</button>
       <span id="level-progress-label">0/10 solved</span>
     </div>
     <div class="level-dots" id="level-dots"></div>
@@ -249,6 +279,26 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
   <button class="btn btn-next" onclick="nextSentence()">Next →</button>
 </div>
 
+  </div>
+
+  <!-- VOCAB MODAL -->
+
+  <div class="vocab-overlay" id="vocab-modal" style="display:none" onclick="handleVocabOverlayClick(event)">
+    <div class="vocab-panel">
+      <div class="vocab-header">
+        <h3>Words Learned</h3>
+        <button class="vocab-close" onclick="closeVocabModal()">✕</button>
+      </div>
+      <div class="vocab-tabs">
+        <button id="vtab-level" class="vtab active" onclick="switchVocabTab('level')">This Level</button>
+        <button id="vtab-all" class="vtab" onclick="switchVocabTab('all')">All Levels</button>
+      </div>
+      <div class="vocab-controls">
+        <span class="vocab-count" id="vocab-count"></span>
+        <button id="vocab-star-filter" class="vocab-star-filter-btn" onclick="toggleVocabFilter()">⭐ Starred only</button>
+      </div>
+      <div id="vocab-word-list" class="vocab-word-list"></div>
+    </div>
   </div>
 
   <!-- LEVEL COMPLETE -->
@@ -561,6 +611,9 @@ let levelIdx=0;           // position within current level\'s order
 let solvedInLevel=new Set(); // sentence indices solved at least once this level run
 let correctN=0, wrongN=0;
 let placed=[], checked=false, easyBlankIdx=0, easySelected='';
+let starredWords=new Set(); // starred word strings
+let vocabTab='level';     // 'level' or 'all'
+let vocabStarredOnly=false;
 
 // ── PERSISTENCE ───────────────────────────────────────────────────
 const LS_KEY='bahasa_state';
@@ -570,7 +623,8 @@ function saveState(){
       diff,currentLevel,maxUnlocked,
       levelSolved:levelSolved.map(s=>[...s]),
       solvedInLevel:[...solvedInLevel],
-      levelOrder,levelIdx
+      levelOrder,levelIdx,
+      starredWords:[...starredWords]
     }));
   }catch(e){}
 }
@@ -586,6 +640,7 @@ function loadState(){
     solvedInLevel=new Set(st.solvedInLevel||[]);
     levelOrder=st.levelOrder||[];
     levelIdx=st.levelIdx||0;
+    if(st.starredWords)starredWords=new Set(st.starredWords);
     return true;
   }catch(e){return false;}
 }
@@ -750,7 +805,7 @@ buildBank(s,showTr);
 function getAllWords(){return LEVELS.flatMap(lvl=>lvl.flatMap(s=>s.id));}
 
 function buildBank(s,showTr){
-const distractors=shuffle(getAllWords().filter(w=>!s.id.includes(w))).slice(0,Math.min(3,s.id.length));
+const distractors=shuffle(getAllWords().filter(w=>!s.id.includes(w))).slice(0,3);
 const words=shuffle([...s.id,...distractors]);
 const wb=document.getElementById('word-bank');
 wb.innerHTML='';
@@ -953,6 +1008,90 @@ function updateProgress(){
 const pct=(solvedInLevel.size/10)*100;
 document.getElementById('progress-fill').style.width=pct+'%';
 document.getElementById('sentence-counter').textContent=`${solvedInLevel.size}/10 solved`;
+}
+
+// ── VOCABULARY ─────────────────────────────────────────────────────
+function getLearnedWords(lvlIdx){
+  const words=new Set();
+  if(lvlIdx!==undefined){
+    levelSolved[lvlIdx].forEach(sentIdx=>{
+      LEVELS[lvlIdx][sentIdx].id.forEach(w=>words.add(w));
+    });
+  } else {
+    LEVELS.forEach((level,i)=>{
+      levelSolved[i].forEach(sentIdx=>{
+        level[sentIdx].id.forEach(w=>words.add(w));
+      });
+    });
+  }
+  return [...words].sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
+}
+
+function openVocabModal(){
+  vocabTab='level';
+  vocabStarredOnly=false;
+  document.getElementById('vocab-star-filter').classList.remove('active');
+  document.getElementById('vtab-level').classList.add('active');
+  document.getElementById('vtab-all').classList.remove('active');
+  document.getElementById('vocab-modal').style.display='flex';
+  renderVocabWords();
+}
+
+function closeVocabModal(){
+  document.getElementById('vocab-modal').style.display='none';
+}
+
+function handleVocabOverlayClick(e){
+  if(e.target===document.getElementById('vocab-modal'))closeVocabModal();
+}
+
+function switchVocabTab(tab){
+  vocabTab=tab;
+  document.getElementById('vtab-level').classList.toggle('active',tab==='level');
+  document.getElementById('vtab-all').classList.toggle('active',tab==='all');
+  renderVocabWords();
+}
+
+function toggleVocabFilter(){
+  vocabStarredOnly=!vocabStarredOnly;
+  document.getElementById('vocab-star-filter').classList.toggle('active',vocabStarredOnly);
+  renderVocabWords();
+}
+
+function toggleStar(word){
+  if(starredWords.has(word))starredWords.delete(word);
+  else starredWords.add(word);
+  saveState();
+  renderVocabWords();
+}
+
+function renderVocabWords(){
+  const words=vocabTab==='level'?getLearnedWords(currentLevel):getLearnedWords();
+  const filtered=vocabStarredOnly?words.filter(w=>starredWords.has(w)):words;
+  const countEl=document.getElementById('vocab-count');
+  const levelLabel=vocabTab==='level'?`Level ${currentLevel+1}`:'all levels';
+  countEl.textContent=`${filtered.length} word${filtered.length!==1?'s':''} from ${levelLabel}`;
+  const container=document.getElementById('vocab-word-list');
+  if(filtered.length===0){
+    container.innerHTML=`<div class="vocab-empty">${
+      words.length===0
+        ?'No words learned yet in this view.<br>Complete some sentences first!'
+        :'No starred words yet.<br>Tap ☆ on any word to star it!'
+    }</div>`;
+    return;
+  }
+  container.innerHTML=filtered.map(w=>{
+    const t=tr(w);
+    const starred=starredWords.has(w);
+    const ws=w.replace(/'/g,'\\\'');
+    return`<div class="vocab-row">
+      <div class="vocab-word-info">
+        <span class="vocab-word">${w}</span>
+        ${t?`<span class="vocab-trans">${t}</span>`:''}
+      </div>
+      <button class="vocab-star-btn" onclick="toggleStar('${ws}')" title="${starred?'Unstar':'Star'} this word">${starred?'⭐':'☆'}</button>
+    </div>`;
+  }).join('');
 }
 
 // ── BOOT ──────────────────────────────────────────────────────────
