@@ -562,12 +562,41 @@ let solvedInLevel=new Set(); // sentence indices solved at least once this level
 let correctN=0, wrongN=0;
 let placed=[], checked=false, easyBlankIdx=0, easySelected='';
 
+// ── PERSISTENCE ───────────────────────────────────────────────────
+const LS_KEY='bahasa_state';
+function saveState(){
+  try{
+    localStorage.setItem(LS_KEY,JSON.stringify({
+      diff,currentLevel,maxUnlocked,
+      levelSolved:levelSolved.map(s=>[...s]),
+      solvedInLevel:[...solvedInLevel],
+      levelOrder,levelIdx
+    }));
+  }catch(e){}
+}
+function loadState(){
+  try{
+    const raw=localStorage.getItem(LS_KEY);
+    if(!raw)return false;
+    const st=JSON.parse(raw);
+    diff=st.diff||'noob';
+    currentLevel=st.currentLevel||0;
+    maxUnlocked=st.maxUnlocked||0;
+    if(st.levelSolved)st.levelSolved.forEach((arr,i)=>{levelSolved[i]=new Set(arr);});
+    solvedInLevel=new Set(st.solvedInLevel||[]);
+    levelOrder=st.levelOrder||[];
+    levelIdx=st.levelIdx||0;
+    return true;
+  }catch(e){return false;}
+}
+
 // ── INIT ──────────────────────────────────────────────────────────
 function setDifficulty(d){
 diff=d;
 ['noob','easy','hard'].forEach(x=>{
 document.getElementById('diff-'+x).className='diff-btn'+(x===d?' active-'+x:'');
 });
+saveState();
 if(levelOrder.length>0) loadSentence(); else startLevel(0);
 }
 
@@ -833,6 +862,7 @@ updateLevelLabel();
 function markSolved(){
 const sentIdx=levelOrder[levelIdx];
 solvedInLevel.add(sentIdx);
+saveState();
 levelSolved[currentLevel].add(sentIdx);
 }
 
@@ -891,6 +921,7 @@ if(!isLastLevel){
 const nextLvl=currentLevel+1;
 if(nextLvl>maxUnlocked){
 maxUnlocked=nextLvl;
+saveState();
 // Show unlock banner briefly
 const banner=document.getElementById('unlock-banner');
 document.getElementById('unlock-title').textContent=`Level ${nextLvl+1} Unlocked!`;
@@ -925,7 +956,22 @@ document.getElementById('sentence-counter').textContent=`${solvedInLevel.size}/1
 }
 
 // ── BOOT ──────────────────────────────────────────────────────────
-setDifficulty('noob');
+if(loadState()&&levelOrder.length>0){
+  ['noob','easy','hard'].forEach(x=>{
+    document.getElementById('diff-'+x).className='diff-btn'+(x===diff?' active-'+x:'');
+  });
+  correctN=0; wrongN=0;
+  document.getElementById('correct-count').textContent=0;
+  document.getElementById('wrong-count').textContent=0;
+  document.getElementById('level-complete').style.display='none';
+  document.getElementById('unlock-banner').classList.remove('show');
+  document.getElementById('main-card').style.display='block';
+  renderLevelDots();
+  updateLevelLabel();
+  loadSentence();
+}else{
+  setDifficulty('noob');
+}
 </script>
 
 </body>
