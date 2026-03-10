@@ -193,10 +193,12 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
 .vocab-star-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px 6px;border-radius:8px;transition:all 0.15s;line-height:1;}
 .vocab-star-btn:hover{background:rgba(255,193,7,0.15);transform:scale(1.15);}
 .vocab-empty{text-align:center;color:var(--muted);font-size:0.88rem;padding:32px 0;line-height:1.6;}
+.vocab-search-wrap{padding:10px 20px 0;}
+.vocab-search{width:100%;padding:8px 12px;border:1.5px solid var(--warm);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.84rem;color:var(--ink);background:white;outline:none;transition:border-color 0.2s;box-sizing:border-box;}
+.vocab-search:focus{border-color:var(--jungle);}
 
 /* DIRECTION TOGGLE */
-.direction-toggle{display:flex;justify-content:center;margin:4px 0 12px;}
-.dir-btn{background:white;border:1.5px solid var(--warm);border-radius:20px;padding:5px 20px;font-size:0.8rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;letter-spacing:0.03em;}
+.dir-btn{background:white;border:1.5px solid var(--warm);border-radius:20px;padding:3px 10px;font-size:0.68rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;letter-spacing:0.03em;white-space:nowrap;}
 .dir-btn:hover{border-color:var(--jungle);color:var(--jungle);}
 .dir-btn.reverse{background:var(--jungle);border-color:var(--jungle);color:white;}
 .dir-btn.reverse:hover{background:var(--jungle-light);border-color:var(--jungle-light);}
@@ -227,11 +229,6 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
     <button class="diff-btn" id="diff-hard" onclick="setDifficulty('hard')">
       <span class="diff-icon">🔥</span><span>Hard</span><span class="diff-sub">whole sentence</span>
     </button>
-  </div>
-
-  <!-- DIRECTION TOGGLE -->
-  <div class="direction-toggle">
-    <button class="dir-btn" id="dir-toggle" onclick="toggleDirection()">EN → ID</button>
   </div>
 
   <!-- LEVEL SELECTOR -->
@@ -270,6 +267,7 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
     <div class="card-top">
       <span class="category-tag" id="cat-tag">—</span>
       <span class="diff-badge noob" id="diff-badge">noob</span>
+      <button class="dir-btn" id="dir-toggle" onclick="toggleDirection()" style="margin-left:auto">EN → ID</button>
     </div>
     <div class="english-sentence" id="english-sentence">Loading…</div>
 
@@ -304,6 +302,9 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
       <div class="vocab-tabs">
         <button id="vtab-level" class="vtab active" onclick="switchVocabTab('level')">This Level</button>
         <button id="vtab-all" class="vtab" onclick="switchVocabTab('all')">All Levels</button>
+      </div>
+      <div class="vocab-search-wrap">
+        <input class="vocab-search" id="vocab-search" type="search" placeholder="Search Bahasa or English…" oninput="handleVocabSearch(this.value)">
       </div>
       <div class="vocab-controls">
         <span class="vocab-count" id="vocab-count"></span>
@@ -460,7 +461,7 @@ const TR={
   'untuk':'for',
   'vegetarian':'vegetarian',
 };
-function tr(w){return TR[w]||TR[w.replace(/[!?,.]$/,'')]||'';}
+function tr(w){return TR[w]||TR[w.replace(/[!?,.]$/,'')]||TR[w.toLowerCase()]||TR[w.toLowerCase().replace(/[!?,.]$/,'')]||'';}
 
 // ── 100 SENTENCES across 10 levels ───────────────────────────────
 // Level 1-2: ultra basic single/two word, greetings, core survival
@@ -626,6 +627,7 @@ let placed=[], checked=false, easyBlankIdx=0, easySelected='';
 let starredWords=new Set(); // starred word strings
 let vocabTab='level';     // 'level' or 'all'
 let vocabStarredOnly=false;
+let vocabSearch='';
 let direction='en-to-id'; // 'en-to-id' or 'id-to-en'
 
 // ── PERSISTENCE ───────────────────────────────────────────────────
@@ -833,7 +835,7 @@ const display=document.getElementById('easy-display');
 display.style.display='flex'; display.style.borderColor=''; display.style.background='';
 display.innerHTML=s.id.map((w,i)=>
 i===easyBlankIdx?`<span class="easy-blank" id="easy-blank">?</span>`
-:`<span class="easy-fixed">${w}</span>`
+:`<span class="easy-fixed">${tr(w)||w}</span>`
 ).join('');
 const correctEn=chosen.t;
 const allTrVals=[...new Set(Object.values(TR))].filter(v=>v!==correctEn);
@@ -1142,25 +1144,32 @@ function getLearnedWords(lvlIdx){
   const words=new Set();
   if(lvlIdx!==undefined){
     levelSolved[lvlIdx].forEach(sentIdx=>{
-      LEVELS[lvlIdx][sentIdx].id.forEach(w=>words.add(w));
+      LEVELS[lvlIdx][sentIdx].id.forEach(w=>words.add(w.toLowerCase()));
     });
   } else {
     LEVELS.forEach((level,i)=>{
       levelSolved[i].forEach(sentIdx=>{
-        level[sentIdx].id.forEach(w=>words.add(w));
+        level[sentIdx].id.forEach(w=>words.add(w.toLowerCase()));
       });
     });
   }
-  return [...words].sort((a,b)=>a.toLowerCase().localeCompare(b.toLowerCase()));
+  return [...words].sort((a,b)=>a.localeCompare(b));
 }
 
 function openVocabModal(){
   vocabTab='level';
   vocabStarredOnly=false;
+  vocabSearch='';
+  document.getElementById('vocab-search').value='';
   document.getElementById('vocab-star-filter').classList.remove('active');
   document.getElementById('vtab-level').classList.add('active');
   document.getElementById('vtab-all').classList.remove('active');
   document.getElementById('vocab-modal').style.display='flex';
+  renderVocabWords();
+}
+
+function handleVocabSearch(val){
+  vocabSearch=val.toLowerCase().trim();
   renderVocabWords();
 }
 
@@ -1194,7 +1203,10 @@ function toggleStar(word){
 
 function renderVocabWords(){
   const words=vocabTab==='level'?getLearnedWords(currentLevel):getLearnedWords();
-  const filtered=vocabStarredOnly?words.filter(w=>starredWords.has(w)):words;
+  const starFiltered=vocabStarredOnly?words.filter(w=>starredWords.has(w)):words;
+  const filtered=vocabSearch
+    ?starFiltered.filter(w=>w.includes(vocabSearch)||(tr(w)||'').toLowerCase().includes(vocabSearch))
+    :starFiltered;
   const countEl=document.getElementById('vocab-count');
   const levelLabel=vocabTab==='level'?`Level ${currentLevel+1}`:'all levels';
   countEl.textContent=`${filtered.length} word${filtered.length!==1?'s':''} from ${levelLabel}`;
@@ -1203,7 +1215,9 @@ function renderVocabWords(){
     container.innerHTML=`<div class="vocab-empty">${
       words.length===0
         ?'No words learned yet in this view.<br>Complete some sentences first!'
-        :'No starred words yet.<br>Tap ☆ on any word to star it!'
+        :vocabSearch
+          ?'No words match your search.'
+          :'No starred words yet.<br>Tap ☆ on any word to star it!'
     }</div>`;
     return;
   }
