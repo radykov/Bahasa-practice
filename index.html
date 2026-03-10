@@ -193,6 +193,13 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
 .vocab-star-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px 6px;border-radius:8px;transition:all 0.15s;line-height:1;}
 .vocab-star-btn:hover{background:rgba(255,193,7,0.15);transform:scale(1.15);}
 .vocab-empty{text-align:center;color:var(--muted);font-size:0.88rem;padding:32px 0;line-height:1.6;}
+
+/* DIRECTION TOGGLE */
+.direction-toggle{display:flex;justify-content:center;margin:4px 0 12px;}
+.dir-btn{background:white;border:1.5px solid var(--warm);border-radius:20px;padding:5px 20px;font-size:0.8rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;letter-spacing:0.03em;}
+.dir-btn:hover{border-color:var(--jungle);color:var(--jungle);}
+.dir-btn.reverse{background:var(--jungle);border-color:var(--jungle);color:white;}
+.dir-btn.reverse:hover{background:var(--jungle-light);border-color:var(--jungle-light);}
 </style>
 
 </head>
@@ -220,6 +227,11 @@ cursor:pointer;transition:all 0.2s;display:flex;flex-direction:column;align-item
     <button class="diff-btn" id="diff-hard" onclick="setDifficulty('hard')">
       <span class="diff-icon">🔥</span><span>Hard</span><span class="diff-sub">whole sentence</span>
     </button>
+  </div>
+
+  <!-- DIRECTION TOGGLE -->
+  <div class="direction-toggle">
+    <button class="dir-btn" id="dir-toggle" onclick="toggleDirection()">EN → ID</button>
   </div>
 
   <!-- LEVEL SELECTOR -->
@@ -614,13 +626,14 @@ let placed=[], checked=false, easyBlankIdx=0, easySelected='';
 let starredWords=new Set(); // starred word strings
 let vocabTab='level';     // 'level' or 'all'
 let vocabStarredOnly=false;
+let direction='en-to-id'; // 'en-to-id' or 'id-to-en'
 
 // ── PERSISTENCE ───────────────────────────────────────────────────
 const LS_KEY='bahasa_state';
 function saveState(){
   try{
     localStorage.setItem(LS_KEY,JSON.stringify({
-      diff,currentLevel,maxUnlocked,
+      diff,currentLevel,maxUnlocked,direction,
       levelSolved:levelSolved.map(s=>[...s]),
       solvedInLevel:[...solvedInLevel],
       levelOrder,levelIdx,
@@ -641,6 +654,7 @@ function loadState(){
     levelOrder=st.levelOrder||[];
     levelIdx=st.levelIdx||0;
     if(st.starredWords)starredWords=new Set(st.starredWords);
+    if(st.direction)direction=st.direction;
     return true;
   }catch(e){return false;}
 }
@@ -653,6 +667,25 @@ document.getElementById('diff-'+x).className='diff-btn'+(x===d?' active-'+x:'');
 });
 saveState();
 if(levelOrder.length>0) loadSentence(); else startLevel(0);
+}
+
+function toggleDirection(){
+direction=direction==='en-to-id'?'id-to-en':'en-to-id';
+updateDirectionUI();
+saveState();
+placed=[]; checked=false; easySelected='';
+loadSentence();
+}
+
+function updateDirectionUI(){
+const btn=document.getElementById('dir-toggle');
+if(direction==='id-to-en'){
+btn.textContent='ID → EN';
+btn.classList.add('reverse');
+}else{
+btn.textContent='EN → ID';
+btn.classList.remove('reverse');
+}
 }
 
 function startLevel(lvlIdx){
@@ -726,7 +759,7 @@ food:'🍜 Food & Drink',want:'🙏 Wants',shopping:'🛍️ Shopping'
 
 const badge=document.getElementById('diff-badge');
 badge.textContent=diff; badge.className='diff-badge '+diff;
-document.getElementById('english-sentence').textContent=s.en;
+document.getElementById('english-sentence').textContent=direction==='id-to-en'?s.id.join(' '):s.en;
 document.getElementById('feedback').className='feedback';
 document.getElementById('feedback').innerHTML='';
 document.getElementById('next-actions').style.display='none';
@@ -751,15 +784,23 @@ function sentences(){return LEVELS[currentLevel][levelOrder[levelIdx]];}
 function loadNoob(s){
 const preview=document.getElementById('noob-preview');
 preview.style.display='flex';
+if(direction==='id-to-en'){
+preview.innerHTML=s.id.map(w=>{
+const t=tr(w);
+return`<div class="noob-word-block"><span class="noob-word">${t||w}</span><span class="noob-trans" style="color:var(--jungle-light)">${w}</span></div>`;
+}).join('');
+}else{
 preview.innerHTML=s.id.map(w=>{
 const t=tr(w);
 return`<div class="noob-word-block"><span class="noob-word">${w}</span>${t?`<span class="noob-trans">${t}</span>`:''}</div>`;
 }).join('');
+}
 showBuildArea(s,true);
 }
 
 // ── EASY ──────────────────────────────────────────────────────────
 function loadEasy(s){
+if(direction==='id-to-en'){loadEasyReverse(s);return;}
 easyBlankIdx=s.id.length>1?(Math.floor(Math.random()*(s.id.length-1))+1):0;
 if(s.id.length===2)easyBlankIdx=1;
 const display=document.getElementById('easy-display');
@@ -780,6 +821,33 @@ return`<button class="easy-opt" data-word="${w}" onclick="selectEasyOpt('${w}',t
 document.getElementById('btn-clear').style.visibility='hidden';
 }
 
+// ID→EN easy: show Bahasa sentence with one word blanked, pick the English translation
+function loadEasyReverse(s){
+// Pick a blank from words that have a TR entry; fallback to any word
+const candidates=s.id.map((w,i)=>({w,i,t:tr(w)})).filter(x=>x.t);
+const chosen=candidates.length>0
+?candidates[Math.floor(Math.random()*candidates.length)]
+:{w:s.id[0],i:0,t:s.en.split(' ')[0]};
+easyBlankIdx=chosen.i;
+const display=document.getElementById('easy-display');
+display.style.display='flex'; display.style.borderColor=''; display.style.background='';
+display.innerHTML=s.id.map((w,i)=>
+i===easyBlankIdx?`<span class="easy-blank" id="easy-blank">?</span>`
+:`<span class="easy-fixed">${w}</span>`
+).join('');
+const correctEn=chosen.t;
+const allTrVals=[...new Set(Object.values(TR))].filter(v=>v!==correctEn);
+const distractors=shuffle(allTrVals).slice(0,3);
+const opts=shuffle([correctEn,...distractors]);
+const optEl=document.getElementById('easy-options');
+optEl.style.display='flex';
+optEl.innerHTML=opts.map(w=>{
+const escaped=w.replace(/'/g,"\\'");
+return`<button class="easy-opt" data-word="${w}" onclick="selectEasyOpt('${escaped}',this)"><span>${w}</span></button>`;
+}).join('');
+document.getElementById('btn-clear').style.visibility='hidden';
+}
+
 function selectEasyOpt(word,btn){
 if(checked)return;
 document.querySelectorAll('.easy-opt').forEach(b=>b.classList.remove('selected'));
@@ -790,6 +858,7 @@ blank.textContent=word; blank.className='easy-blank filled';
 
 // ── HARD ──────────────────────────────────────────────────────────
 function loadHard(s){
+if(direction==='id-to-en'){showBuildAreaEnglish(s);return;}
 showBuildArea(s,false);
 }
 
@@ -802,7 +871,33 @@ document.getElementById('btn-clear').style.visibility='visible';
 buildBank(s,showTr);
 }
 
+// ID→EN hard: show Bahasa sentence, build the English translation
+function showBuildAreaEnglish(s){
+const ba=document.getElementById('build-area');
+ba.style.display='flex'; ba.className='build-area';
+ba.innerHTML='<span class="build-placeholder">Tap words below to build the translation →</span>';
+document.getElementById('word-bank').style.display='flex';
+document.getElementById('btn-clear').style.visibility='visible';
+buildBankEnglish(s);
+}
+
+function buildBankEnglish(s){
+const correctWords=s.en.split(' ');
+const distractors=shuffle(getAllEnglishWords().filter(w=>!correctWords.includes(w))).slice(0,3);
+const words=shuffle([...correctWords,...distractors]);
+const wb=document.getElementById('word-bank');
+wb.innerHTML='';
+words.forEach((w,i)=>{
+const btn=document.createElement('button');
+btn.className='word-chip'; btn.dataset.index=i;
+btn.innerHTML=`<span>${w}</span>`;
+btn.onclick=()=>tapWord(w,i,btn,false);
+wb.appendChild(btn);
+});
+}
+
 function getAllWords(){return LEVELS.flatMap(lvl=>lvl.flatMap(s=>s.id));}
+function getAllEnglishWords(){return LEVELS.flatMap(lvl=>lvl.flatMap(s=>s.en.split(' ')));}
 
 function buildBank(s,showTr){
 const distractors=shuffle(getAllWords().filter(w=>!s.id.includes(w))).slice(0,3);
@@ -870,16 +965,36 @@ const fb=document.getElementById('feedback');
 if(diff==='easy'){
 if(!easySelected){fb.className='feedback hint';fb.textContent='💡 Tap a word to fill the blank first!';return;}
 checked=true;
-const correct=s.id[easyBlankIdx];
 const blank=document.getElementById('easy-blank');
 const display=document.getElementById('easy-display');
+if(direction==='id-to-en'){
+const correctEn=tr(s.id[easyBlankIdx])||s.en.split(' ')[easyBlankIdx];
+const isCorrect=easySelected===correctEn;
+blank.className='easy-blank '+(isCorrect?'correct-b':'wrong-b');
+display.style.borderColor=isCorrect?'var(--correct)':'var(--wrong)';
+display.style.background=isCorrect?'rgba(45,138,78,0.06)':'rgba(196,48,48,0.04)';
+if(isCorrect){
+fb.className='feedback correct';
+fb.innerHTML=`✅ <strong>Correct!</strong> "${s.id[easyBlankIdx]}" = <strong>${correctEn}</strong>`;
+markSolved(); correctN++; document.getElementById('correct-count').textContent=correctN;
+}else{
+fb.className='feedback wrong';
+fb.innerHTML=`❌ "${s.id[easyBlankIdx]}" means: <strong>${correctEn}</strong>`;
+wrongN++; document.getElementById('wrong-count').textContent=wrongN;
+}
+document.querySelectorAll('.easy-opt').forEach(b=>{
+if(b.dataset.word===correctEn){b.style.borderColor='var(--correct)';b.style.color='var(--correct)';}
+else b.classList.add('used-opt');
+});
+}else{
+const correct=s.id[easyBlankIdx];
 if(easySelected===correct){
 blank.className='easy-blank correct-b';
 display.style.borderColor='var(--correct)'; display.style.background='rgba(45,138,78,0.06)';
 fb.className='feedback correct';
 fb.innerHTML=`✅ <strong>Betul!</strong> "${s.id.join(' ')}" — perfect!`;
 markSolved(); correctN++; document.getElementById('correct-count').textContent=correctN;
-} else {
+}else{
 blank.className='easy-blank wrong-b';
 display.style.borderColor='var(--wrong)'; display.style.background='rgba(196,48,48,0.04)';
 fb.className='feedback wrong';
@@ -889,19 +1004,21 @@ wrongN++; document.getElementById('wrong-count').textContent=wrongN;
 document.querySelectorAll('.easy-opt').forEach(b=>{
 if(b.dataset.word===correct){b.style.borderColor='var(--correct)';b.style.color='var(--correct)';}
 else b.classList.add('used-opt');
-});
-} else {
+}
+);
+}
+}else{
 if(placed.length===0){fb.className='feedback hint';fb.textContent='💡 Tap the words below to build the sentence first!';return;}
 checked=true;
 const attempt=placed.map(p=>p.word).join(' ');
-const correct=s.id.join(' ');
+const correct=direction==='id-to-en'?s.en:s.id.join(' ');
 const ba=document.getElementById('build-area');
 if(attempt===correct){
 ba.classList.add('correct');
 fb.className='feedback correct';
-fb.innerHTML=`✅ <strong>Betul!</strong> "${correct}" — well done!`;
+fb.innerHTML=`✅ <strong>${direction==='id-to-en'?'Correct':'Betul'}!</strong> "${correct}" — well done!`;
 markSolved(); correctN++; document.getElementById('correct-count').textContent=correctN;
-} else {
+}else{
 ba.classList.add('wrong');
 fb.className='feedback wrong';
 fb.innerHTML=`❌ Not quite. The answer is: <strong>${correct}</strong>`;
@@ -927,11 +1044,21 @@ const s=sentences();
 const fb=document.getElementById('feedback');
 fb.className='feedback hint';
 if(diff==='easy'){
+if(direction==='id-to-en'){
+const bahasaWord=s.id[easyBlankIdx];
+fb.innerHTML=`💡 <strong>Hint:</strong> What is the English for "${bahasaWord}"?`;
+}else{
 const missing=s.id[easyBlankIdx];
 const t=tr(missing);
 fb.innerHTML=`💡 <strong>Hint:</strong> The missing word means "${t||'?'}"`;
-} else {
+}
+}else{
+if(direction==='id-to-en'){
+const enWords=s.en.split(' ');
+fb.innerHTML=`💡 <strong>Hint:</strong> ${s.hint} (${enWords.length} English word${enWords.length>1?'s':''})`;
+}else{
 fb.innerHTML=`💡 <strong>Hint:</strong> ${s.hint} (${s.id.length} word${s.id.length>1?'s':''})`;
+}
 }
 }
 
@@ -1099,6 +1226,7 @@ if(loadState()&&levelOrder.length>0){
   ['noob','easy','hard'].forEach(x=>{
     document.getElementById('diff-'+x).className='diff-btn'+(x===diff?' active-'+x:'');
   });
+  updateDirectionUI();
   correctN=0; wrongN=0;
   document.getElementById('correct-count').textContent=0;
   document.getElementById('wrong-count').textContent=0;
