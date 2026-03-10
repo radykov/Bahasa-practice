@@ -805,7 +805,7 @@ buildBank(s,showTr);
 function getAllWords(){return LEVELS.flatMap(lvl=>lvl.flatMap(s=>s.id));}
 
 function buildBank(s,showTr){
-const distractors=shuffle(getAllWords().filter(w=>!s.id.includes(w))).slice(0,Math.min(3,s.id.length));
+const distractors=shuffle(getAllWords().filter(w=>!s.id.includes(w))).slice(0,3);
 const words=shuffle([...s.id,...distractors]);
 const wb=document.getElementById('word-bank');
 wb.innerHTML='';
